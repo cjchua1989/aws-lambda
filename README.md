@@ -5,6 +5,7 @@ This is a boiler plate that you can use for system
 Install Docker on your local machine
 
 ### Docker Installation Ubuntu
+(Reference: [https://docs.docker.com/engine/install/ubuntu/](https://docs.docker.com/engine/install/ubuntu/))
 #### SET UP THE REPOSITORY
 * Update the apt package index
 ```shell script
@@ -62,6 +63,8 @@ $ apt-cache madison docker-ce
 $ sudo apt-get install docker-ce=<VERSION_STRING> docker-ce-cli=<VERSION_STRING> containerd.io
 ```
 #### MANAGE DOCKER AS A NON-ROOT USER
+(Reference: [https://docs.docker.com/engine/install/linux-postinstall/](https://docs.docker.com/engine/install/linux-postinstall/))
+
 * Create the ```docker``` group.
 ```shell script
 $ sudo groupadd docker

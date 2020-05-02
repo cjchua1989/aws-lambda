@@ -1,0 +1,39 @@
+{
+    "name": "boilerplate",
+    "version": "1.0.0",
+    "description": "Bouiler plate for aws lambda",
+    "main": "handler.js",
+    "scripts": {
+        "test": "mocha ./tests"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cjchua1989/aws-lambda.git"
+    },
+    "keywords": [
+        "serverless",
+        "lambda",
+        "aws"
+    ],
+    "author": "John Wilson Chua",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/cjchua1989/aws-lambda/issues"
+    },
+    "homepage": "https://github.com/cjchua1989/aws-lambda#readme",
+    "dependencies": {
+        "aws-sdk": "^2.668.0",
+        "axios": "^0.19.2",
+        "lodash": "^4.17.15",
+        "moment-timezone": "^0.5.28",
+        "mysql": "^2.18.1",
+        "mysql-migrations": "^1.0.6"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "dotenv": "^8.2.0",
+        "faker": "^4.1.0",
+        "mocha": "^7.1.2",
+        "serverless-dotenv-plugin": "^2.4.2"
+    }
+}

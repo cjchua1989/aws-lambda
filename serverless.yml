@@ -1,0 +1,72 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: boilerplate
+plugins:
+  - serverless-dotenv-plugin
+# app and org for use with dashboard.serverless.com
+#app: your-app-name
+#org: your-org-name
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128 # optional, in MB, default is 1024
+  timeout: 30 # optional, in seconds, default is 6
+  role: ${self:custom.ROLE_ARN}
+  region: ${self:custom.REGION}
+  profile: ${self:custom.PROFILE}
+  stage: ${opt:stage, 'local'}
+  tags:
+    Project: ${self:PROJECT_NAME}
+  environment:
+    PROFILE: ${self:custom.PROFILE}
+    REGION: ${self:custom.REGION}
+    ROLE_ARN: ${self:custom.ROLE_ARN}
+    STAGE: ${self:custom.STAGE}
+  vpc: # Optional VPC. But if you use VPC then both subproperties (securityGroupIds and subnetIds) are required
+    securityGroupIds:
+      - ${self:custom.SECURITY_GRP}
+    subnetIds:
+      - ${self:custom.SUBNET_01}
+      - ${self:custom.SUBNET_02}
+      - ${self:custom.SUBNET_03}
+
+# you can add packaging information here
+package:
+#  include:
+#    - include-me.js
+#    - include-me-dir/**
+  exclude:
+    - tests/*
+    - environment/*
+    - migrations/*
+    - events/*
+
+functions:
+  # Lambda API Functions
+  # - ${file(./src/functions/api/example/config.yml)}
+
+  # Lambda Event Functions
+  # - ${file(./src/functions/events/example/config.yml)}
+
+  # Lambda CRON Functions
+  # - ${file(./src/functions/cron/example/config.yml)}
+
+custom:
+  ${file(./custom.yml)}

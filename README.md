@@ -96,3 +96,54 @@ newgrp docker
 ```shell script
 ./artisan.sh stop
 ```
+
+### Create Migration files
+```shell script
+./artisan.sh make:migration <table_name>
+```
+
+### Run Migration
+```shell script
+./artisan.sh migrate
+```
+
+### Create new Lambda Function
+```shell script
+./artisan.sh make:event <function_name>
+```
+
+### Create new API Lambda Function
+```shell script
+./artisan.sh make:api <function_name>
+```
+
+### Create new CRON Lambda Function
+```shell script
+./artisan.sh make:cron <function_name>
+```
+
+### Create new Repository
+```shell script
+./artisan.sh make:repository <repository_name>
+```
+
+### Create new Service
+```shell script
+./artisan.sh make:service <service_name>
+```
+
+### Run Test
+```shell script
+./artisan.sh test
+```
+
+### Invoke a function without parameter
+```shell script
+./artisan.sh invoke <function_name>
+```
+
+### Invoke a function with parameter
+```shell script
+./artisan.sh invoke <function_name> <path_to_parameter (e.g events/api/users.json)> 
+```
+

@@ -60,7 +60,27 @@ elif [ $command == 'make:api' ]; then
     if [ -z $function_name ]; then
       echo "Function name is required";
     else
+
       mkdir "$PWD/src/functions/api/$function_name"
+
+      cat > "$PWD/events/api/$function_name.json" <<EOF
+{
+    "body": "<JSON STRING>"
+}
+EOF
+      cat > "$PWD/tests/api/$function_name.js" <<EOF
+'use strict';
+
+require('dotenv').config();
+const { assert, expect } = require("chai");
+const { execute } = require("../../src/functions/api/$function_name/handler");
+
+describe("<Test Goal>", async () => {
+    it("<Validation Label>", async () => {
+    });
+});
+
+EOF
 
       cat > "$PWD/src/functions/api/$function_name/config.yml" <<EOF
 $(echo $function_name):
@@ -130,6 +150,24 @@ elif [ $command == 'make:event' ]; then
     else
       mkdir "$PWD/src/functions/events/$function_name"
 
+      cat > "$PWD/events/events/$function_name.json" <<EOF
+{
+}
+EOF
+      cat > "$PWD/tests/events/$function_name.js" <<EOF
+'use strict';
+
+require('dotenv').config();
+const { assert, expect } = require("chai");
+const { execute } = require("../../src/functions/events/$function_name/handler");
+
+describe("<Test Goal>", async () => {
+    it("<Validation Label>", async () => {
+    });
+});
+
+EOF
+
       cat > "$PWD/src/functions/events/$function_name/config.yml" <<EOF
 $(echo $function_name):
   handler: src/functions/events/$function_name/handler.execute
@@ -182,6 +220,24 @@ elif [ $command == 'make:cron' ]; then
       echo "Function name is required";
     else
       mkdir "$PWD/src/functions/cron/$function_name"
+
+      cat > "$PWD/events/cron/$function_name.json" <<EOF
+{
+}
+EOF
+      cat > "$PWD/tests/cron/$function_name.js" <<EOF
+'use strict';
+
+require('dotenv').config();
+const { assert, expect } = require("chai");
+const { execute } = require("../../src/functions/cron/$function_name/handler");
+
+describe("<Test Goal>", async () => {
+    it("<Validation Label>", async () => {
+    });
+});
+
+EOF
 
       cat > "$PWD/src/functions/cron/$function_name/config.yml" <<EOF
 $(echo $function_name):

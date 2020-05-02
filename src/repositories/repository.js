@@ -1,4 +1,23 @@
-'use strict';
+/**
+ * Query sql statement
+ *
+ * @param dbClient
+ * @param sql
+ * @param options
+ * @returns {Promise<unknown>}
+ */
+const query = (dbClient, sql, options) => {
+    return new Promise((resolve, reject) => {
+        dbClient.query(sql, options, (error, results) => {
+            if (error) {
+                reject(error);
+                throw new Error('Something went wrong.');
+            }
+
+            resolve(results);
+        });
+    });
+};
 
 /**
  * Find data via column key
@@ -10,13 +29,13 @@
  * @param columns
  * @returns {Promise<boolean|*>}
  */
-const find = async (dbClient, table, id, idColumn = 'id', columns = ["*"]) => {
-    let sql = "SELECT " + columns.join(", ") + " FROM ?? WHERE ?? = ? LIMIT 1";
-    let options = [table, idColumn, id];
+const find = async (dbClient, table, id, idColumn = 'id', columns = ['*']) => {
+    const sql = `SELECT ${columns.join(', ')} FROM ?? WHERE ?? = ? LIMIT 1`;
+    const options = [table, idColumn, id];
 
-    let result = await query(dbClient, sql, options);
+    const result = await query(dbClient, sql, options);
 
-    if(result.length) return result[0];
+    if (result.length) return result[0];
 
     return false;
 };
@@ -29,12 +48,12 @@ const find = async (dbClient, table, id, idColumn = 'id', columns = ["*"]) => {
  * @returns {Promise<unknown>}
  */
 const insert = async (dbClient, payload) => {
-    const {table, keyValues} = payload;
+    const { table, keyValues } = payload;
 
     const options = [table, keyValues];
     const sql = `INSERT INTO ?? SET ?`;
 
-    return await query(dbClient, sql, options);
+    return query(dbClient, sql, options);
 };
 
 /**
@@ -45,48 +64,19 @@ const insert = async (dbClient, payload) => {
  * @returns {Promise<any>}
  */
 const update = async (dbClient, payload) => {
-    const {table, keyValues, conditions, conditionsValues} = payload;
+    const { table, keyValues, conditions, conditionsValues } = payload;
 
     const options = [table, keyValues, ...conditionsValues];
     const sql = `UPDATE ?? SET ? ${conditions}`;
 
     const result = await query(dbClient, sql, options);
 
-    return (result.length) ? result : false;
-}
-
-/**
- * Query sql statement
- *
- * @param dbClient
- * @param sql
- * @param options
- * @returns {Promise<unknown>}
- */
-const query = (dbClient, sql, options) => {
-    return new Promise((resolve, reject) => {
-        dbClient.query(
-            sql,
-            options,
-            (err, results, _fields) => {
-                if (err) {
-                    reject(err);
-                    console.log('error', err);
-                    const dbErrorResponse = {
-                        message: `Something went wrong.`,
-                    };
-                    throw(dbErrorResponse);
-                }
-
-                resolve(results);
-            }
-        )
-    });
+    return result.length ? result : false;
 };
 
 module.exports = {
     query,
     find,
     insert,
-    update
+    update,
 };

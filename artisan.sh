@@ -69,21 +69,17 @@ elif [ $command == 'make:api' ]; then
 }
 EOF
       cat > "$PWD/tests/api/$function_name.js" <<EOF
-'use strict';
-
 require('dotenv').config();
-const { assert, expect } = require("chai");
-const { execute } = require("../../src/functions/api/$function_name/handler");
+const { assert, expect } = require('chai');
+const { execute } = require('../../src/functions/api/$function_name/handler');
 
-describe("<Test Goal>", async () => {
-    it("<Validation Label>", async () => {
-    });
+describe('<Test Goal>', async () => {
+    it('<Validation Label>', async () => {});
 });
-
 EOF
 
       cat > "$PWD/src/functions/api/$function_name/config.yml" <<EOF
-$(echo $function_name):
+$function_name:
   handler: src/functions/api/$function_name/handler.execute
   events:
     - http:
@@ -95,48 +91,40 @@ $(echo $function_name):
 EOF
 
       cat > "$PWD/src/functions/api/$function_name/response.js" <<EOF
-'use strict';
-
 module.exports.STATUS_200 = {
     code: 200,
-    message: ""
-}
+    message: '',
+};
 EOF
 
       cat > "$PWD/src/functions/api/$function_name/handler.js" <<EOF
-'use strict';
-
 // Global
-const { API_200, API_500 } = require("../../../libs/responses");
+const { API_200, API_500 } = require('../../../libs/responses');
 
 // Local
-const RESPONSE = require("./response");
+const RESPONSE = require('./response');
 
-module.exports.execute = async(event) => {
-
-    try{
-
-      return {
-        ...API_200,
-        body: JSON.stringify(RESPONSE.STATUS_200)
-      };
-
-    } catch(error) {
-
-        console.log("Error");
+module.exports.execute = async (event) => {
+    try {
+        return {
+            ...API_200,
+            body: JSON.stringify(RESPONSE.STATUS_200),
+        };
+    } catch (error) {
+        console.log('Error');
         console.log({
-            error
+            error,
         });
-        console.log("End Error");
+        console.log('End Error');
 
         return {
             ...API_500,
             statusCode: error.code ? error.code : 500,
             body: JSON.stringify({
                 code: error.code ? error.code : 500,
-                message: error.message
-            })
-        }
+                message: error.message,
+            }),
+        };
     }
 };
 EOF
@@ -155,58 +143,46 @@ elif [ $command == 'make:event' ]; then
 }
 EOF
       cat > "$PWD/tests/events/$function_name.js" <<EOF
-'use strict';
-
 require('dotenv').config();
-const { assert, expect } = require("chai");
-const { execute } = require("../../src/functions/events/$function_name/handler");
+const { assert, expect } = require('chai');
+const { execute } = require('../../src/functions/events/$function_name/handler');
 
-describe("<Test Goal>", async () => {
-    it("<Validation Label>", async () => {
-    });
+describe('<Test Goal>', async () => {
+    it('<Validation Label>', async () => {});
 });
-
 EOF
 
       cat > "$PWD/src/functions/events/$function_name/config.yml" <<EOF
-$(echo $function_name):
+$function_name:
   handler: src/functions/events/$function_name/handler.execute
   environment:
     STAGE: \${self:custom.STAGE}
 EOF
 
       cat > "$PWD/src/functions/events/$function_name/response.js" <<EOF
-'use strict';
-
 module.exports.STATUS_200 = {
     code: 200,
-    message: ""
-}
+    message: '',
+};
 EOF
 
       cat > "$PWD/src/functions/events/$function_name/handler.js" <<EOF
-'use strict';
-
 // Local
-const RESPONSE = require("./response");
+const RESPONSE = require('./response');
 
-module.exports.execute = async(event) => {
-
-    try{
-
-      return RESPONSE.STATUS_200;
-
-    } catch(error) {
-
-        console.log("Error");
+module.exports.execute = async (event) => {
+    try {
+        return RESPONSE.STATUS_200;
+    } catch (error) {
+        console.log('Error');
         console.log({
-            error
+            error,
         });
-        console.log("End Error");
+        console.log('End Error');
 
         return {
             code: error.code ? error.code : 500,
-            message: error.message
+            message: error.message,
         };
     }
 };
@@ -226,21 +202,17 @@ elif [ $command == 'make:cron' ]; then
 }
 EOF
       cat > "$PWD/tests/cron/$function_name.js" <<EOF
-'use strict';
-
 require('dotenv').config();
-const { assert, expect } = require("chai");
-const { execute } = require("../../src/functions/cron/$function_name/handler");
+const { assert, expect } = require('chai');
+const { execute } = require('../../src/functions/cron/$function_name/handler');
 
-describe("<Test Goal>", async () => {
-    it("<Validation Label>", async () => {
-    });
+describe('<Test Goal>', async () => {
+    it("<Validation Label>", async () => {});
 });
-
 EOF
 
       cat > "$PWD/src/functions/cron/$function_name/config.yml" <<EOF
-$(echo $function_name):
+$function_name:
   handler: src/functions/cron/$function_name/handler.execute
   events:
   - schedule:
@@ -252,37 +224,29 @@ $(echo $function_name):
 EOF
 
       cat > "$PWD/src/functions/cron/$function_name/response.js" <<EOF
-'use strict';
-
 module.exports.STATUS_200 = {
     code: 200,
-    message: ""
-}
+    message: '',
+};
 EOF
 
       cat > "$PWD/src/functions/cron/$function_name/handler.js" <<EOF
-'use strict';
-
 // Local
-const RESPONSE = require("./response");
+const RESPONSE = require('./response');
 
-module.exports.execute = async(event) => {
-
-    try{
-
-      return RESPONSE.STATUS_200;
-
-    } catch(error) {
-
-        console.log("Error");
+module.exports.execute = async (event) => {
+    try {
+        return RESPONSE.STATUS_200;
+    } catch (error) {
+        console.log('Error');
         console.log({
-            error
+            error,
         });
-        console.log("End Error");
+        console.log('End Error');
 
         return {
             code: error.code ? error.code : 500,
-            message: error.message
+            message: error.message,
         };
     }
 };
@@ -292,17 +256,15 @@ EOF
 elif [ $command == 'make:repository' ]; then
 
   cat > "$PWD/src/repositories/$(echo $name)Repository.js" <<EOF
-'use strict';
+const RP = require('./repository');
 
-const RP = require("./repository");
-
+module.exports = {};
 EOF
 
 elif [ $command == 'make:service' ]; then
 
   cat > "$PWD/src/services/$(echo $name)Service.js" <<EOF
-'use strict';
-
+module.exports = {};
 EOF
 
 elif [ $command == 'install' ]; then

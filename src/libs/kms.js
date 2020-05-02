@@ -1,9 +1,8 @@
-'use strict';
-
 const AWS = require('aws-sdk');
+
 const kms = new AWS.KMS({ region: process.env.REGION });
-const STAGE = process.env.STAGE;
-let KEYS = {};
+const { STAGE } = process.env;
+const KEYS = {};
 
 /**
  * Decrypt the KMS encrypted value
@@ -13,22 +12,20 @@ let KEYS = {};
  * @returns {Promise<string|*>}
  */
 module.exports.decrypt = async (encrypted, index = null) => {
-
-    if( index && KEYS[index])
-    {
+    if (index && KEYS[index]) {
         return KEYS[index];
     }
 
-    if(STAGE === 'local') return encrypted;
-    let payload = {
-        CiphertextBlob: Buffer.from(encrypted, 'base64')
+    if (STAGE === 'local') return encrypted;
+    const payload = {
+        CiphertextBlob: Buffer.from(encrypted, 'base64'),
     };
 
     try {
-        let data = await kms.decrypt(payload).promise();
-        let decrypt = data.Plaintext.toString( 'ascii' );
+        const data = await kms.decrypt(payload).promise();
+        const decrypt = data.Plaintext.toString('ascii');
 
-        if(index) KEYS[index] = decrypt;
+        if (index) KEYS[index] = decrypt;
 
         return decrypt;
     } catch (error) {

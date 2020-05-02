@@ -1,10 +1,8 @@
-'use strict';
-
 require('dotenv').config();
 
-const { createConnection } = require("./src/libs/mysql");
 const migration = require('mysql-migrations');
+const { createConnection } = require('./src/libs/mysql');
 
 createConnection().then((connection) => {
-    migration.init(connection, __dirname + '/migrations');
+    migration.init(connection, `${__dirname}/migrations`);
 });

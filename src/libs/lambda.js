@@ -1,7 +1,6 @@
-'use strict';
-
-const LAMBDA_URL = process.env.LAMBDA_URL;
+const { LAMBDA_URL } = process.env;
 const AWS = require('aws-sdk');
+
 const LAMBDA = new AWS.Lambda();
 
 // EVENTS
@@ -14,29 +13,26 @@ const LAMBDA = new AWS.Lambda();
  * @param Payload
  * @returns {Promise<any>}
  */
-module.exports.invokeEvent = async(FunctionName, Payload = {}) => {
-    let result = await LAMBDA.invoke({
+module.exports.invokeEvent = async (FunctionName, Payload = {}) => {
+    return LAMBDA.invoke({
         FunctionName: `${LAMBDA_URL}-${FunctionName}`,
         InvocationType: 'Event',
-        Payload: JSON.stringify(Payload)
+        Payload: JSON.stringify(Payload),
     }).promise();
-
-    return result;
 };
 
 /**
  * Invoke the lambda function with response
  *
  * @param FunctionName
- * @param Payload
+ * @param Parameter
  * @returns {Promise<any>}
  */
-module.exports.invokeWithResponse = async(FunctionName, Payload) => {
-
-    let result = await LAMBDA.invoke({
+module.exports.invokeWithResponse = async (FunctionName, Parameter) => {
+    const result = await LAMBDA.invoke({
         FunctionName: `${LAMBDA_URL}-${FunctionName}`,
         InvocationType: 'RequestResponse',
-        Payload: JSON.stringify(Payload)
+        Payload: JSON.stringify(Parameter),
     }).promise();
 
     return JSON.parse(result.Payload);

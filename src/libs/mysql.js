@@ -1,8 +1,8 @@
 const mysql = require('mysql');
-const { decrypt } = require("./kms");
+const { decrypt } = require('./kms');
 
 /**
- * Create nw mysql connection
+ * Create new mysql connection
  *
  * @returns {Promise<*>}
  */
@@ -12,8 +12,11 @@ module.exports.createConnection = async () => {
         connectTimeout: 60 * 60 * 1000,
         host: process.env.MYSQLDB_URL,
         user: process.env.MYSQLDB_USERNAME,
-        password: await decrypt(process.env.MYSQLDB_PASSWORD, 'MYSQLDB_PASSWORD'),
-        database: process.env.MYSQLDB_NAME
+        password: await decrypt(
+            process.env.MYSQLDB_PASSWORD,
+            'MYSQLDB_PASSWORD'
+        ),
+        database: process.env.MYSQLDB_NAME,
     });
 };
 
@@ -24,13 +27,11 @@ module.exports.createConnection = async () => {
  * @returns {Promise<unknown>}
  */
 module.exports.closeConnection = async (connection) => {
-
-    return new Promise((resolve => {
+    return new Promise((resolve) => {
         connection.end((error) => {
-            console.log("Connection Closed");
+            console.log('Connection Closed');
             console.log(error);
             resolve();
         });
-    }));
-
+    });
 };

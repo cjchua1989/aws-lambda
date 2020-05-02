@@ -75,22 +75,24 @@ $ sudo usermod -aG docker $USER
 newgrp docker 
 ```
 
-# Start Local Environment
+# Tools
+
+### Start Local Environment
 ```shell script
 ./artisan.sh init
 ```
 
-# Configure Local Environment
+### Configure Local Environment
 ```shell script
 ./artisan.sh configure <KEY> <SECRET>
 ```
 
-# Start Local Environment
+### Start Local Environment
 ```shell script
 ./artisan.sh start
 ```
 
-# Stop Local Environment
+### Stop Local Environment
 ```shell script
 ./artisan.sh stop
 ```

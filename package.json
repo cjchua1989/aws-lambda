@@ -27,7 +27,8 @@
         "lodash": "^4.17.15",
         "moment-timezone": "^0.5.28",
         "mysql": "^2.18.1",
-        "mysql-migrations": "^1.0.6"
+        "mysql-migrations": "^1.0.6",
+        "sequelize": "^5.21.7"
     },
     "devDependencies": {
         "chai": "^4.2.0",

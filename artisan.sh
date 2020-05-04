@@ -255,6 +255,8 @@ EOF
 
 elif [ $command == 'make:repository' ]; then
 
+  name=$2
+
   cat > "$PWD/src/repositories/$(echo $name)Repository.js" <<EOF
 const RP = require('./repository');
 
@@ -263,7 +265,41 @@ EOF
 
 elif [ $command == 'make:service' ]; then
 
+  name=$2
+
   cat > "$PWD/src/services/$(echo $name)Service.js" <<EOF
+module.exports = {};
+EOF
+
+elif [ $command == 'make:model' ]; then
+
+  name=$2
+
+  cat > "$PWD/src/models/$(echo $name)Model.js" <<EOF
+const { Sequelize, Model } = require('sequelize');
+const { getConnection } = require('../config/databases');
+
+class User extends Model {}
+
+User.init(
+    {
+        id: {
+            type: Sequelize.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+    },
+    {
+        sequelize: getConnection(),
+    }
+);
+
+module.exports = User;
+EOF
+
+  cat > "$PWD/src/repositories/$(echo $name)Repository.js" <<EOF
+const Model = require('../models/$(echo $name)Model');
+
 module.exports = {};
 EOF
 

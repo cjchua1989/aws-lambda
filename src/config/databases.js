@@ -13,7 +13,7 @@ const connections = {
 
 const active = {};
 
-const getConnection = async (conn = 'main') => {
+const getConnection = (conn = 'main') => {
     if (!active[conn]) {
         const config = connections[conn];
 

@@ -125,6 +125,11 @@ newgrp docker
 ./artisan.sh make:cron <function_name>
 ```
 
+### Create new Model
+```shell script
+./artisan.sh make:model <model_name>
+```
+
 ### Create new Repository
 ```shell script
 ./artisan.sh make:repository <repository_name>

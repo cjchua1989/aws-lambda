@@ -14,7 +14,7 @@ elif [ $command == 'configure' ]; then
   key=$2
   secret=$3
 
-  if [ -z $key || -z $secret ]; then
+  if [ -z $key ] || [ -z $secret ]; then
     echo "Key and Secret is required to configure";
   else
     docker-compose run node serverless config credentials --provider aws --key "$key" --secret "$secret" --profile custom-profile
@@ -86,8 +86,23 @@ $function_name:
         path: $function_name
         method: get
         timeout: 300
+        cors: true
   environment:
     STAGE: \${self:custom.STAGE}
+EOF
+
+      cat > "$PWD/src/functions/api/$function_name/validate.js" <<EOF
+const { Schema } = require('validate');
+const { ParameterError } = require('../../../libs/errors');
+
+const RULE = new Schema({});
+
+module.exports = (request) => {
+    const errors = RULE.validate(request);
+    if (errors.length) {
+        throw new ParameterError(errors);
+    }
+};
 EOF
 
       cat > "$PWD/src/functions/api/$function_name/response.js" <<EOF
@@ -99,32 +114,22 @@ EOF
 
       cat > "$PWD/src/functions/api/$function_name/handler.js" <<EOF
 // Global
-const { API_200, API_500 } = require('../../../libs/responses');
+const { API_200, THROW_API_ERROR } = require('../../../libs/responses');
 
 // Local
 const RESPONSE = require('./response');
+const VALIDATE = require('./validate');
 
 module.exports.execute = async (event) => {
     try {
+        VALIDATE(event.body);
+
         return {
             ...API_200,
             body: JSON.stringify(RESPONSE.STATUS_200),
         };
     } catch (error) {
-        console.log('Error');
-        console.log({
-            error,
-        });
-        console.log('End Error');
-
-        return {
-            ...API_500,
-            statusCode: error.code ? error.code : 500,
-            body: JSON.stringify({
-                code: error.code ? error.code : 500,
-                message: error.message,
-            }),
-        };
+        return THROW_API_ERROR(error);
     }
 };
 EOF
@@ -159,6 +164,20 @@ $function_name:
     STAGE: \${self:custom.STAGE}
 EOF
 
+      cat > "$PWD/src/functions/events/$function_name/validate.js" <<EOF
+const { Schema } = require('validate');
+const { ParameterError } = require('../../../libs/errors');
+
+const RULE = new Schema({});
+
+module.exports = (request) => {
+    const errors = RULE.validate(request);
+    if (errors.length) {
+        throw new ParameterError(errors);
+    }
+};
+EOF
+
       cat > "$PWD/src/functions/events/$function_name/response.js" <<EOF
 module.exports.STATUS_200 = {
     code: 200,
@@ -167,23 +186,20 @@ module.exports.STATUS_200 = {
 EOF
 
       cat > "$PWD/src/functions/events/$function_name/handler.js" <<EOF
+// Global
+const { THROW_ERROR } = require('../../../libs/responses');
+
 // Local
 const RESPONSE = require('./response');
+const VALIDATE = require('./validate');
 
 module.exports.execute = async (event) => {
     try {
+        VALIDATE(event);
+
         return RESPONSE.STATUS_200;
     } catch (error) {
-        console.log('Error');
-        console.log({
-            error,
-        });
-        console.log('End Error');
-
-        return {
-            code: error.code ? error.code : 500,
-            message: error.message,
-        };
+        return THROW_ERROR(error);
     }
 };
 EOF
@@ -223,6 +239,20 @@ $function_name:
     STAGE: \${self:custom.STAGE}
 EOF
 
+      cat > "$PWD/src/functions/cron/$function_name/validate.js" <<EOF
+const { Schema } = require('validate');
+const { ParameterError } = require('../../../libs/errors');
+
+const RULE = new Schema({});
+
+module.exports = (request) => {
+    const errors = RULE.validate(request);
+    if (errors.length) {
+        throw new ParameterError(errors);
+    }
+};
+EOF
+
       cat > "$PWD/src/functions/cron/$function_name/response.js" <<EOF
 module.exports.STATUS_200 = {
     code: 200,
@@ -231,23 +261,20 @@ module.exports.STATUS_200 = {
 EOF
 
       cat > "$PWD/src/functions/cron/$function_name/handler.js" <<EOF
+// Global
+const { THROW_ERROR } = require('../../../libs/responses');
+
 // Local
 const RESPONSE = require('./response');
+const VALIDATE = require('./validate');
 
 module.exports.execute = async (event) => {
     try {
+        VALIDATE(event);
+
         return RESPONSE.STATUS_200;
     } catch (error) {
-        console.log('Error');
-        console.log({
-            error,
-        });
-        console.log('End Error');
-
-        return {
-            code: error.code ? error.code : 500,
-            message: error.message,
-        };
+        return THROW_ERROR(event);
     }
 };
 EOF

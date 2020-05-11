@@ -1,5 +1,14 @@
 version: '3.3'
 services:
+  docs: 
+    image: swaggerapi/swagger-editor
+    restart: always
+    environment:
+      URL: /api
+    ports:
+      - 80:8080
+    volumes:
+      - ./docs/api:/usr/share/nginx/html/api
   db:
     image: mysql:5.7.23
     restart: always

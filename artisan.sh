@@ -286,9 +286,9 @@ elif [ $command == 'make:repository' ]; then
 
   cat > "$PWD/src/repositories/$(echo $name)Repository.js" <<EOF
 const Model = require('../models/$(echo $name)Model');
-const Repository = require('./repository');
+const Repository = require('./Repository');
 
-class $(echo $name)Repository extends Repository{
+class $(echo $name)Repository extends Repository {
     constructor() {
         super(Model);
     }
@@ -326,9 +326,9 @@ EOF
 
   cat > "$PWD/src/repositories/$(echo $name)Repository.js" <<EOF
 const Model = require('../models/$(echo $name)Model');
-const Repository = require('./repository');
+const Repository = require('./Repository');
 
-class $(echo $name)Repository extends Repository{
+class $(echo $name)Repository extends Repository {
     constructor() {
         super(Model);
     }

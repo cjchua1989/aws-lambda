@@ -41,7 +41,7 @@ elif [ $command == 'make:migration' ]; then
     if [ -z $table ]; then
       echo "Table name is required";
     else
-      cat > "./migrations/$(date +%s)_$(echo $table)_table.js" <<EOF
+      cat > "./migrations/$(date +%s%N | cut -b1-13)_$(echo $table)_table.js" <<EOF
 'use strict';
 
 const up = "";

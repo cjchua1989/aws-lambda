@@ -303,25 +303,18 @@ elif [ $command == 'make:model' ]; then
   name=$2
 
   cat > "$PWD/src/models/$(echo $name)Model.js" <<EOF
-const { Sequelize, Model } = require('sequelize');
-const { getConnection } = require('../config/databases');
+const { Sequelize } = require('sequelize');
+const Model = require('./model');
 
-class User extends Model {}
-
-User.init(
-    {
-        id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
+const $(echo $name)Model = Model.createModel('$(echo $name)Model', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
     },
-    {
-        sequelize: getConnection(),
-    }
-);
+});
 
-module.exports = User;
+module.exports = $(echo $name)Model;
 EOF
 
   cat > "$PWD/src/repositories/$(echo $name)Repository.js" <<EOF

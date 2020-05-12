@@ -1,30 +1,30 @@
+const { DataTypes } = require('sequelize');
+const { uuid4 } = require('uuid');
 const { getConnection } = require('../config/databases');
 
-const scopes = {
-    defaultScope: {
-        where: {
-            deletedAt: null,
+module.exports.createModel = (modelName, attributes) => {
+    const modelAttributes = {
+        ...attributes,
+        createdAt: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
         },
-    },
-    scopes: {
-        find: (id, idColumn = 'id', attributes = null) => {
-            const scope = {
-                attributes,
-                where: {
-                    [idColumn]: id,
-                },
-            };
-
-            return scope;
+        updatedAt: {
+            type: DataTypes.DATE,
+            defaultValue: DataTypes.NOW,
         },
-    },
-};
+        deletedAt: {
+            type: DataTypes.DATE,
+        },
+    };
 
-module.exports.createModel = (modelName, attributes = {}) => {
-    return getConnection().define(modelName, attributes, {
-        scopes,
+    return getConnection().define(modelName, modelAttributes, {
         paranoid: true,
     });
+};
+
+module.exports.uuid = () => {
+    return uuid4();
 };
 
 module.exports.find = (model, id) => {

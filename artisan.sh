@@ -92,7 +92,7 @@ $function_name:
 EOF
 
       cat > "$PWD/src/functions/api/$function_name/validate.js" <<EOF
-const { Schema } = require('validate');
+const Schema = require('validate');
 const { ParameterError } = require('../../../libs/errors');
 
 const RULE = new Schema({});
@@ -165,7 +165,7 @@ $function_name:
 EOF
 
       cat > "$PWD/src/functions/events/$function_name/validate.js" <<EOF
-const { Schema } = require('validate');
+const Schema = require('validate');
 const { ParameterError } = require('../../../libs/errors');
 
 const RULE = new Schema({});
@@ -240,7 +240,7 @@ $function_name:
 EOF
 
       cat > "$PWD/src/functions/cron/$function_name/validate.js" <<EOF
-const { Schema } = require('validate');
+const Schema = require('validate');
 const { ParameterError } = require('../../../libs/errors');
 
 const RULE = new Schema({});
@@ -285,9 +285,16 @@ elif [ $command == 'make:repository' ]; then
   name=$2
 
   cat > "$PWD/src/repositories/$(echo $name)Repository.js" <<EOF
-const RP = require('./repository');
+const Model = require('../models/$(echo $name)Model');
+const Repository = require('./repository');
 
-module.exports = {};
+class $(echo $name)Repository extends Repository{
+    constructor() {
+        super(Model);
+    }
+}
+
+module.exports = $(echo $name)Repository;
 EOF
 
 elif [ $command == 'make:service' ]; then
@@ -304,7 +311,7 @@ elif [ $command == 'make:model' ]; then
 
   cat > "$PWD/src/models/$(echo $name)Model.js" <<EOF
 const { Sequelize } = require('sequelize');
-const Model = require('./model');
+const Model = require('./Model');
 
 const $(echo $name)Model = Model.createModel('$(echo $name)Model', {
     id: {
@@ -319,8 +326,15 @@ EOF
 
   cat > "$PWD/src/repositories/$(echo $name)Repository.js" <<EOF
 const Model = require('../models/$(echo $name)Model');
+const Repository = require('./repository');
 
-module.exports = {};
+class $(echo $name)Repository extends Repository{
+    constructor() {
+        super(Model);
+    }
+}
+
+module.exports = $(echo $name)Repository;
 EOF
 
 elif [ $command == 'install' ]; then

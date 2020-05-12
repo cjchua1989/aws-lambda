@@ -30,6 +30,7 @@
         "mysql-migrations": "^1.0.6",
         "mysql2": "^2.1.0",
         "sequelize": "^5.21.7",
+        "uuid": "^8.0.0",
         "validate": "^5.1.0"
     },
     "devDependencies": {

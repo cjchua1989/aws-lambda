@@ -23,7 +23,7 @@
     "homepage": "https://github.com/cjchua1989/aws-lambda#readme",
     "dependencies": {
         "aws-sdk": "^2.668.0",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "lodash": "^4.17.15",
         "moment-timezone": "^0.5.28",
         "mysql": "^2.18.1",

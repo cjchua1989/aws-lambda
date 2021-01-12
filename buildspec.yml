@@ -1,0 +1,33 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - ASSUME_ROLE_ARN=${DEPLOY_ROLE}
+      - TEMP_ROLE=`aws sts assume-role --role-arn $ASSUME_ROLE_ARN --role-session-name lamda_deployer`
+      - export TEMP_ROLE
+      - export AWS_ACCESS_KEY_ID=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.AccessKeyId')
+      - export AWS_SECRET_ACCESS_KEY=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SecretAccessKey')
+      - export AWS_SESSION_TOKEN=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SessionToken')
+      - export AWS_ACCESS_PROFILE="TEMP_AWS_PROFILE"
+      - npm install -g serverless@1.67.0 && npm install -g mocha && npm install --production
+      - AWS_CREDENTIAL_FILE=~/.aws/credentials
+      - mkdir ~/.aws
+      - touch $AWS_CREDENTIAL_FILE
+      - chmod 600 $AWS_CREDENTIAL_FILE
+      - echo "["$AWS_ACCESS_PROFILE"]" > $AWS_CREDENTIAL_FILE
+      - echo "aws_access_key_id=${AWS_ACCESS_KEY_ID}" >> $AWS_CREDENTIAL_FILE
+      - echo "aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}" >> $AWS_CREDENTIAL_FILE
+      - echo "aws_session_token=${AWS_SESSION_TOKEN}" >> $AWS_CREDENTIAL_FILE
+  pre_build:
+    commands:
+      - PARAM_PREFIX="/${SERVICE_NAME}/${STAGE}"
+      - PARAMETER="env"
+      - PARAM_KEY="$PARAM_PREFIX/$PARAMETER"
+      - DEST_FILENAME="herpderp.${STAGE}"
+      - aws ssm get-parameter --name $PARAM_KEY --region $REGION --output text --query Parameter.Value > $DEST_FILENAME
+      - export $(grep -v '^#' $DEST_FILENAME | xargs -d '\n')
+  build:
+    commands:
+      - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-app.yml
+      # - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-events.yml
+      # - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-crons.yml

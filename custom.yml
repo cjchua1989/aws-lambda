@@ -1,0 +1,47 @@
+PROJECT_NAME: ${env:PROJECT_NAME}
+SERVICE_NAME: ${env:SERVICE_NAME}
+
+# ENVIRONMENT
+STAGE: ${env:STAGE}
+REGION: ${env:REGION}
+ROLE_ARN: ${env:ROLE_ARN}
+API_SECRET: ${env:API_SECRET}
+
+# SECURITY
+SECURITY_GRP: ${env:SECURITY_GRP}
+SUBNET_01: ${env:SUBNET_01}
+SUBNET_02: ${env:SUBNET_02}
+SUBNET_03: ${env:SUBNET_03}
+
+#MYSQL
+MYSQLDB_URL: ${env:MYSQLDB_URL}
+MYSQLDB_NAME: ${env:MYSQLDB_NAME}
+MYSQLDB_USERNAME: ${env:MYSQLDB_USERNAME}
+MYSQLDB_PASSWORD: ${env:MYSQLDB_PASSWORD}
+MYSQLDB_PORT: ${env:MYSQLDB_PORT}
+
+#S3
+S3_REGION: ${env:S3_REGION}
+S3_BUCKET: ${env:S3_BUCKET}
+
+#GL
+GL_APP_ID: ${env:GL_APP_ID}
+GL_APP_SECRET: ${env:GL_APP_SECRET}
+GL_PASSPHRASE: ${env:GL_PASSPHRASE}
+GL_CODE: ${env:GL_CODE}
+
+# Uncomment this enable the authorization #
+# AUTHORIZE:
+#  name: authorization
+#  resultTtlInSeconds: 0
+#  type: TOKEN
+#  identitySource: method.request.header.Authorization
+#  identityValidationExpression: Bearer (.*)
+
+# SPLIT STACKS
+splitStacks:
+  perFunction: true
+  perType: false
+  perGroupFunction: false
+  stackConcurrency: 10
+  resourceConcurrency: 20

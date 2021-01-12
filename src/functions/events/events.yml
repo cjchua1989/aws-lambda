@@ -1,0 +1,2 @@
+# EVENTS
+# - ${file(./src/functions/events/<name>/config.yml)} # Duplicate this and add the name of the lambda function

@@ -1,0 +1,2 @@
+# CRONS
+# - ${file(./src/functions/crons/<name>/config.yml)} # Duplicate this and add the name of the lambda function

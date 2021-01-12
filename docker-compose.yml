@@ -1,0 +1,24 @@
+version: '3.3'
+services:
+  docs:
+    image: swaggerapi/swagger-editor
+    restart: always
+    environment:
+      URL: /api
+    ports:
+      - 80:8080
+  db:
+    image: mysql:5.7.23
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: database
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      - ./environment/mysql:/var/lib/mysql

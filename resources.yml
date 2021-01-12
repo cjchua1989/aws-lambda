@@ -1,0 +1,51 @@
+Resources:
+  DenyFailureGatewayResponse:
+    Type: 'AWS::ApiGateway::GatewayResponse'
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+      ResponseType: ACCESS_DENIED
+      ResponseTemplates:
+        application/json: |
+          {
+            "code": 403,
+            "message": "Access Denied",
+          }
+      RestApiId:
+        Ref: 'ApiGatewayRestApi'
+      StatusCode: '403'
+
+  AuthFailureGatewayResponse:
+    Type: 'AWS::ApiGateway::GatewayResponse'
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+      ResponseType: UNAUTHORIZED
+      ResponseTemplates:
+        application/json: |
+          {
+            "code": 401,
+            "message": "Unauthorized",
+          }
+      RestApiId:
+        Ref: 'ApiGatewayRestApi'
+      StatusCode: '401'
+
+  ExpiredGatewayResponse:
+    Type: 'AWS::ApiGateway::GatewayResponse'
+    Properties:
+      ResponseParameters:
+        gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+        gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+      ResponseType: EXPIRED_TOKEN
+      ResponseTemplates:
+        application/json: |
+          {
+            "code": 419,
+            "message":"Access token is expired"
+          }
+      RestApiId:
+        Ref: 'ApiGatewayRestApi'
+      StatusCode: '419'

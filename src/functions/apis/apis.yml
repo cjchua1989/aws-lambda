@@ -1,0 +1,6 @@
+# MIDDLEWARES
+# - ${file(./src/functions/middlewares/authorization/config.yml)} # Uncomment this if you want to implement middleware
+
+# APIS
+# - ${file(./src/functions/apis/<name>/config.yml)} # Duplicate this and add the name of the lambda function
+ - ${file(./src/functions/apis/auth/config.yml)} # Remove this when you dont need it

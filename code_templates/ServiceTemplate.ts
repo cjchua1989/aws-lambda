@@ -2,13 +2,16 @@ import { existsSync, writeFileSync } from 'fs';
 import { pascalCase } from 'case-anything';
 
 const content = `
-import { Connection } from 'typeorm';
+import axios, { AxiosInstance } from 'axios';
 
 export class <class_name> {
-    private connection: Connection;
+    private client: AxiosInstance;
 
-    constructor(connection: Connection) {
-        this.connection = connection;
+    constructor(secret_key: string) {
+        this.client = axios.create({
+            baseURL: '<url_of_service>',
+            timeout: 30000,
+        });
     }
 }
 `;

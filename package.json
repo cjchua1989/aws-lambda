@@ -18,6 +18,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.14",
     "@types/faker": "^5.1.5",
+    "@types/jest": "^26.0.20",
     "@types/mocha": "^8.2.0",
     "@types/yargs": "^15.0.12",
     "aws-sdk": "^2.822.0",
@@ -28,6 +29,7 @@
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "faker": "^5.1.0",
+    "jest": "^26.6.3",
     "mocha": "^8.2.1",
     "mysql": "^2.18.1",
     "pluralize": "^8.0.0",

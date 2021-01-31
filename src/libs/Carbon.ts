@@ -1,4 +1,5 @@
 import * as moment from 'moment-timezone';
+import { v4 } from 'uuid';
 moment.tz.setDefault(process.env.CARBON_TIMEZONE ?? 'Asia/Manila');
 
 export class Carbon {
@@ -8,6 +9,10 @@ export class Carbon {
 
     static nowFormatted(): string {
         return moment().format('YYYY-MM-DD HH:mm:ss');
+    }
+
+    static nowFormattedWithHash(): string {
+        return moment().format('YYYY-MM-DD HH:mm:ss') + `#${v4()}`;
     }
 
     static yesterday(): moment.Moment {

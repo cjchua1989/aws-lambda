@@ -1,10 +1,10 @@
 import { Connection } from 'typeorm';
-import { UserRepository } from '../repositories/UserRepository';
-import { AuthAccessDenied } from '../errors/AuthAccessDenied';
+import { UserRepository } from '../../../repositories/UserRepository';
+import { AuthAccessDenied } from './responses';
 import * as bcrypt from 'bcrypt';
-import { UserModel } from '../models/UserModel';
+import { UserModel } from '../../../models/UserModel';
 
-export class UserService {
+export class AuthAction {
     private connection: Connection;
     private repository: UserRepository;
 
@@ -13,7 +13,7 @@ export class UserService {
         this.repository = connection.getCustomRepository(UserRepository);
     }
 
-    async login(username: string, password: string): Promise<UserModel> {
+    async execute(username: string, password: string): Promise<UserModel> {
         const user = await this.repository.getUserByUserName(username);
         if (!user) throw new AuthAccessDenied();
 

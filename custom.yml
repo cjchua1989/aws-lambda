@@ -30,6 +30,12 @@ GL_APP_SECRET: ${env:GL_APP_SECRET}
 GL_PASSPHRASE: ${env:GL_PASSPHRASE}
 GL_CODE: ${env:GL_CODE}
 
+#DYNAMODB
+TABLE_NAME: ${env:TABLE_NAME}
+
+#CARBON
+CARBON_TIMEZONE: ${env:CARBON_TIMEZONE}
+
 # Uncomment this enable the authorization #
 # AUTHORIZE:
 #  name: authorization

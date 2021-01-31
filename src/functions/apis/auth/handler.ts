@@ -6,15 +6,14 @@ import { ApiGatewayEvent } from '../../../libs/Contracts/ApiGatewayEvent';
 import Validate from './validate';
 import { Responses } from './responses';
 import { AuthRequest } from './requests';
-import { UserService } from '../../../services/UserService';
+import { AuthAction } from './action';
 
 export async function execute(event: ApiGatewayEvent): Promise<APIHttpResponse> {
     try {
         const request: AuthRequest = Validate(JSON.parse(event.body));
         const connection = await Databases.getConnection();
-        const userService = new UserService(connection);
-
-        const user = await userService.login(request.username, request.password);
+        const action = new AuthAction(connection);
+        const user = await action.execute(request.username, request.password);
 
         return API_RESPONSE({
             ...Responses.STATUS_200,

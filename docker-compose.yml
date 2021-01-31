@@ -11,7 +11,6 @@ services:
     image: mysql:5.7.23
     restart: always
     environment:
-      MYSQL_USER: root
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: database
     ports:
@@ -23,7 +22,6 @@ services:
       # Where our data will be persisted
     volumes:
       - ./environment/mysql:/var/lib/mysql
-      - ./environment/mysql_config/my.cnf:/etc/mysql/my.cnf
   dynamodb:
     image: amazon/dynamodb-local:latest
     ports:

@@ -22,3 +22,8 @@ services:
       # Where our data will be persisted
     volumes:
       - ./environment/mysql:/var/lib/mysql
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"

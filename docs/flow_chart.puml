@@ -8,19 +8,16 @@ start
         :Edit **/migrations/<table>_XXXXXXXX.js**;
         :Run **npm run migrate**;
     elseif (Create Model) then (yes)
-        :Run **ts-node artisan make:model <name>**;
+        :Run **ts-node artisan make:model <name>** for mysql
+        OR
+        Run **ts-node artisan dynamo:model <name>** for dynamodb;
         :Edit **/src/models/<name>Model.ts**;
     elseif (Create Repository) then (yes)
-        :Run **ts-node artisan make:repository <name>**;
+        :Run **ts-node artisan make:repository <name>** for mysql
+        OR
+        Run **ts-node artisan dynamo:repository <name>** for dynamodb;
         :Edit **/src/repositories/<name>Repository.ts**;
         :Edit **/src/models/<name>Model.ts**;
-    elseif (Create Service) then (yes)
-        :Run **ts-node artisan make:service <name>**;
-        :Edit **/src/services/<name>Service.ts**;
-    elseif (Create Test Script) then (yes)
-        :Run **ts-node artisan make:test <name>**;
-        :Edit **/tests/<name>Test.ts**;
-        :Run **npm run test**;
     elseif (Create API Handler) then (yes)
         :Run **ts-node swagger:request <name>**;
         :Define request parameter at **/docs/swagger/definitions/<name>Request.ts**;
@@ -30,24 +27,23 @@ start
         :Define api handling at **/docs/swagger/path/<name>.ts**;
         :Run **npm run swagger:build**;
         :Load generated swagger file from **/docs/swagger/swagger.yml**;
-        :**Create Test Script**;
         :Run **ts-node artisan make:api <name>**;
         :Edit files at **/src/functions/apis/<name>>**;
+        :Set up the unit testing at the **handler_test.ts**;
         :Add handler at **/src/functions/apis/apis.yml**;
     elseif (Create Event Handler) then (yes)
-        :**Create Test Script**;
         :Run **ts-node artisan make:event <name>**;
         :Edit files at **/src/functions/events/<name>>**;
-        :Add handler at **/src/functions/events/events.yml**;
-    elseif (Create Event Handler) then (yes)
-        :**Create Test Script**;
-        :Run **ts-node artisan make:event <name>**;
-        :Edit files at **/src/functions/events/<name>>**;
+        :Set up the unit testing at the **handler_test.ts**;
         :Add handler at **/src/functions/events/events.yml**;
     elseif (Create Cron Handler) then (yes)
         :Run **ts-node artisan make:cron <name>**;
         :Edit files at **/src/functions/crons/<name>>**;
+        :Set up the unit testing at the **handler_test.ts**;
         :Add handler at **/src/functions/crons/crons.yml**;
+    elseif (Create Service) then (yes)
+        :Run **ts-node artisan make:service <name>**;
+        :Edit **/src/services/<name>Service.ts**;
     endif
 stop
 

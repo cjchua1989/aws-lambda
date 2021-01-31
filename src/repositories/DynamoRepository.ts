@@ -7,6 +7,14 @@ import { DynamoModel } from '../Models/DynamoModel';
 
 const TABLE_NAME = process.env.TABLE_NAME ?? '';
 
+export enum LSI {
+    ID_INDEX = 'IdIndex',
+}
+
+export enum GSI {
+    CREATED_AT_INDEX = 'CreatedAtIndex',
+}
+
 export interface Filter {
     [key: string]: string;
 }

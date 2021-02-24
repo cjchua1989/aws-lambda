@@ -9,7 +9,7 @@ import { LANGUAGE } from '../language';
 const key = '<api_path>';
 const method = METHODS.post;
 const tag = TAGS_NAMES.RESOURCES;
-const summary = '<RequestNameHere>';
+const summary = '<Add function summary here>';
 const parameters = {
     body: {
         schema: '<Definition Name>',

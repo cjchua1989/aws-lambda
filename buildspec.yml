@@ -28,6 +28,6 @@ phases:
       - export $(grep -v '^#' $DEST_FILENAME | xargs -d '\n')
   build:
     commands:
-      - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-app.yml
-      # - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-events.yml
-      # - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-crons.yml
+      - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-api.yml
+      - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-events.yml
+      - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-crons.yml

@@ -2,7 +2,7 @@ import { existsSync, writeFileSync } from 'fs';
 import { pascalCase } from 'case-anything';
 
 const content = `
-import { <model_name> } from '../Models/<model_name>';
+import { <model_name> } from '../models/<model_name>';
 
 export const LOOKUP = '<LOOKUP>';
 export const REFKEY = '<REFKEY>';

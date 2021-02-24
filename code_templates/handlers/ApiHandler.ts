@@ -102,7 +102,7 @@ test('422: PARAMETER ERROR', async () => {
 
 test('200: SUCCESS', async () => {
     const event: ApiGatewayEvent = {
-        body: JSON.stringify(<TsetRequest>{
+        body: JSON.stringify(<<request_name>>{
             parameter_name: 'value',
         }),
     };

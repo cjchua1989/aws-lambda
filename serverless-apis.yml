@@ -15,7 +15,7 @@ service: ${self:custom.SERVICE_NAME}-api
 plugins:
   - serverless-dotenv-plugin
   - serverless-plugin-typescript
-  - serverless-plugin-split-stacks
+#  - serverless-plugin-split-stacks
   - serverless-offline
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
@@ -31,12 +31,6 @@ provider:
   runtime: nodejs12.x
   versionFunctions: false
   endpointType: REGIONAL
-  resourcePolicy:
-    - Effect: Allow
-      Principal: '*'
-      Action: execute-api:Invoke
-      Resource:
-        - execute-api:/*/*/*
   memorySize: 128 # optional, in MB, default is 1024
   timeout: 30 # optional, in seconds, default is 6
   role: ${self:custom.ROLE_ARN}

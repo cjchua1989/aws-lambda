@@ -70,7 +70,7 @@ export class <action_name> {
         this.connection = connection;
     }
     
-    async execute(): Promise<any> {
+    async execute(): Promise<void> {}
 }
     `;
 }

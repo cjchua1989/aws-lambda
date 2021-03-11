@@ -184,7 +184,9 @@ const addPath = (
                         required: true,
                         description: row.description,
                         example: row.example ?? undefined,
-                        schema: row.schema,
+                        schema: {
+                            type: TYPES.string,
+                        },
                     });
                     break;
                 case PARAMETER_TYPES.path:

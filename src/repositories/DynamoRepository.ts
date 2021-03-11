@@ -2,8 +2,8 @@ import { docClient } from '../libs/DynamoDB';
 import { mapper } from '../libs/DynamoDB';
 import { DocumentClient } from 'aws-sdk/lib/dynamodb/document_client';
 import { ExpressionAttributeNameMap } from 'aws-sdk/clients/dynamodb';
-import { Carbon } from '../Libs/Carbon';
-import { DynamoModel } from '../Models/DynamoModel';
+import { Carbon } from '../libs/Carbon';
+import { DynamoModel } from '../models/DynamoModel';
 
 const TABLE_NAME = process.env.TABLE_NAME ?? '';
 

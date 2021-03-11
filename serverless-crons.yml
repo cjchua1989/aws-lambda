@@ -15,7 +15,6 @@ service: ${self:custom.SERVICE_NAME}-crons
 plugins:
   - serverless-dotenv-plugin
   - serverless-plugin-typescript
-  - serverless-plugin-split-stacks
   - serverless-offline
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
@@ -31,12 +30,6 @@ provider:
   runtime: nodejs12.x
   versionFunctions: false
   endpointType: REGIONAL
-  resourcePolicy:
-    - Effect: Allow
-      Principal: '*'
-      Action: execute-api:Invoke
-      Resource:
-        - execute-api:/*/*/*
   memorySize: 128 # optional, in MB, default is 1024
   timeout: 30 # optional, in seconds, default is 6
   role: ${self:custom.ROLE_ARN}
@@ -51,6 +44,7 @@ provider:
     SERVICE_NAME: ${self:custom.SERVICE_NAME}
     ROLE_ARN: ${self:custom.ROLE_ARN}
     STAGE: ${self:custom.STAGE}
+    TABLE_NAME: ${self:custom.TABLE_NAME}
   vpc: # Optional VPC. But if you use VPC then both subproperties (securityGroupIds and subnetIds) are required
     securityGroupIds:
       - ${self:custom.SECURITY_GRP}

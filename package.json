@@ -17,13 +17,11 @@
   "author": "KnightRaven",
   "license": "ISC",
   "devDependencies": {
-    "@types/chai": "^4.2.14",
     "@types/faker": "^5.1.5",
     "@types/jest": "^26.0.20",
     "@types/yargs": "^15.0.12",
     "aws-sdk": "^2.822.0",
     "case-anything": "^1.1.2",
-    "chai": "^4.2.0",
     "chai-json-schema": "^1.5.1",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",

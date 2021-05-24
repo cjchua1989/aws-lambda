@@ -6,9 +6,9 @@ const OPENAPI = '3.0.0';
 const PROJECT_INFO = {
     description: '',
     version: '1.0.0',
-    title: 'ProjectName',
+    title: 'Jerwyn Rabor',
     contact: {
-        email: 'example@example.com',
+        email: 'zjnrabor@917ventures.com',
     },
     license: {
         name: 'Apache 2.0',

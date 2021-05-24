@@ -1,0 +1,20 @@
+@startuml
+
+User -> Register: register(name, email, mobile, password)
+
+Register -> DB: Check if email exist
+
+alt Email exist
+Register -> User: 409: Email already exist
+end
+
+Register -> DB: Check if mobile exist
+alt Mobile exist
+Register -> User: 409: Mobile already exist
+end
+
+Register -> DB: insertUser(name, email, mobile, password)
+
+Register -> User: 200: Registration Successful
+
+@enduml

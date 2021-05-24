@@ -8,6 +8,7 @@ const up =
     '  `password` TEXT NOT NULL, ' +
     '  `created_at` DATETIME NOT NULL DEFAULT NOW(),  ' +
     '  `updated_at` DATETIME NOT NULL DEFAULT NOW(), ' +
+    '  `expired_at` DATETIME NOT NULL DEFAULT DATE_ADD(NOW(), INTERVAL 1 HOUR),  ' +
     '  `deleted_at` DATETIME NULL, ' +
     '  PRIMARY KEY (`id`), ' +
     '  UNIQUE INDEX `email` (`email` ASC), ' +

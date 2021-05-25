@@ -22,10 +22,10 @@ export class RegisterAction {
     }
 
     async execute(request: RegisterRequest): Promise<OutputData> {
-        const emailExist = await this.repository.emailExist(request.email);
+        const emailExist = await this.repository.checkExist({ email: request.email });
         if (emailExist) throw new EmailExist();
 
-        const mobileExist = await this.repository.mobileExist(request.mobile);
+        const mobileExist = await this.repository.checkExist({ mobile: request.mobile });
         if (mobileExist) throw new MobileExist();
 
         const user = new UserModel();

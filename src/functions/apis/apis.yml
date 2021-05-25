@@ -3,5 +3,6 @@
 
 # APIS
 # - ${file(./src/functions/apis/<name>/config.yml)} # Duplicate this and add the name of the lambda function
- - ${file(./src/functions/apis/auth/config.yml)} # Remove this when you dont need it
- - ${file(./src/functions/apis/register/config.yml)} # Remove this when you dont need it
+ - ${file(./src/functions/apis/auth/config.yml)}
+ - ${file(./src/functions/apis/register/config.yml)}
+ - ${file(./src/functions/apis/delete/config.yml)}

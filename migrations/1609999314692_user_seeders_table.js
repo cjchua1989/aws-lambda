@@ -8,4 +8,4 @@ const down = 'TRUNCATE TABLE `users`;';
 module.exports = {
     up,
     down,
-}
+};

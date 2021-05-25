@@ -1,0 +1,15 @@
+@startuml
+
+User -> Delete: delete(uuid)
+
+Delete -> DB: Check if uuid exist
+
+alt Uuid exist
+Delete -> User: 409: Uuid doesn't exist
+end
+
+Delete -> DB: softDeleteUser(uuid)
+
+Delete -> User: 200: Successfully deleted
+
+@enduml

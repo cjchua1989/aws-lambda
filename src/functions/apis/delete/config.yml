@@ -1,12 +1,11 @@
-register:
-  handler: src/functions/apis/register/handler.execute
+delete:
+  handler: src/functions/apis/delete/handler.execute
   events:
     - http:
-        path: /register
-        method: post
+        path: /user/{id}
+        method: delete
         timeout: 300
         cors: true
-        # authorizer: ${self:custom.AUTHORIZE}
 
   environment:
     MYSQLDB_URL: ${self:custom.MYSQLDB_URL}

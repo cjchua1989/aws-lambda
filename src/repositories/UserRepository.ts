@@ -10,23 +10,19 @@ export class UserRepository extends Repository<UserModel> {
             .getOne();
     }
 
-    async emailExist(email: string): Promise<boolean> {
+    async checkExist(column): Promise<boolean> {
         const count = await this.count({
-            where: {
-                email,
-            },
+            where: column,
         });
 
         return count > 0;
     }
 
-    async mobileExist(mobile: string): Promise<boolean> {
-        const count = await this.count({
-            where: {
-                mobile,
-            },
+    async deleteUser(uuid: string): Promise<UserModel> {
+        const user = await this.findOneOrFail({
+            uuid: uuid,
         });
-
-        return count > 0;
+        await this.softDelete(user);
+        return user;
     }
 }

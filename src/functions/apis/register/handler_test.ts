@@ -2,27 +2,11 @@ import { execute } from './handler';
 import { ApiGatewayEvent } from '../../../libs/Contracts/ApiGatewayEvent';
 import { RegisterRequest } from './requests';
 import * as faker from 'faker';
-import { UserModel } from '../../../models/UserModel';
-import { Databases } from '../../../libs/Mysql';
-import { UserRepository } from '../../../repositories/UserRepository';
 import { Bcrypt } from '../../../libs/Bcrypt';
-
-async function seedUser(): Promise<UserModel> {
-    const connection = await Databases.getConnection();
-    const repository = connection.getCustomRepository(UserRepository);
-    const user = new UserModel();
-
-    user.name = faker.name.firstName();
-    user.email = faker.internet.email();
-    user.mobile = `09${faker.random.number(999999999).toString().padStart(9, '0')}`;
-    user.password = Bcrypt.generate(faker.random.alphaNumeric(18));
-    await repository.save(user);
-
-    return user;
-}
+import { UserSeeder } from '../../../seeders/UserSeeder';
 
 test('409: EXISTING EMAIL', async () => {
-    const user = await seedUser();
+    const user = await UserSeeder.seedUser();
 
     const event: ApiGatewayEvent = {
         body: JSON.stringify(<RegisterRequest>{
@@ -46,7 +30,7 @@ test('409: EXISTING EMAIL', async () => {
 });
 
 test('409: EXISTING MOBILE', async () => {
-    const user = await seedUser();
+    const user = await UserSeeder.seedUser();
 
     const event: ApiGatewayEvent = {
         body: JSON.stringify(<RegisterRequest>{

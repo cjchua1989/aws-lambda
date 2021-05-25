@@ -6,3 +6,4 @@
  - ${file(./src/functions/apis/auth/config.yml)}
  - ${file(./src/functions/apis/register/config.yml)}
  - ${file(./src/functions/apis/delete/config.yml)}
+ - ${file(./src/functions/apis/view/config.yml)}

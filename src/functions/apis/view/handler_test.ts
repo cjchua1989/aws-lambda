@@ -41,7 +41,6 @@ test('200: SUCCESS', async () => {
     expect(response).toHaveProperty('code');
     expect(response).toHaveProperty('message');
     expect(response).toHaveProperty('data');
-    expect(response).toHaveProperty('data.user_id');
     expect(response).toHaveProperty('data.name');
     expect(response).toHaveProperty('data.email');
     expect(response).toHaveProperty('data.mobile');

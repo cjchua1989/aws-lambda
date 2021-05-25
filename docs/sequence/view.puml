@@ -1,0 +1,15 @@
+@startuml
+
+User -> View: search(uuid)
+
+View -> DB: Check if uuid exist
+
+alt Uuid exist
+View -> User: 409: Id doesn't exist
+end
+
+View -> DB: search(uuid)
+
+View -> User: 200: Return user records
+
+@enduml

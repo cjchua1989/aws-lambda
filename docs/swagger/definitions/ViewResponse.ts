@@ -1,11 +1,11 @@
 import { API_STANDARD, TYPES } from '../default';
 
 module.exports.default = {
-    RegisterResponse: {
+    DeleteResponse: {
         ...API_STANDARD(),
-        data: {
-            type: TYPES.object,
-            description: 'Data object of the user',
+        key: {
+            type: TYPES.string,
+            description: 'Deleted data of the user',
             properties: {
                 id: {
                     type: TYPES.string,
@@ -22,6 +22,14 @@ module.exports.default = {
                 mobile: {
                     type: TYPES.string,
                     description: 'Mobile number of the user',
+                },
+                email_verified_at: {
+                    type: TYPES.string,
+                    description: 'Email verification date of the user',
+                },
+                mobile_verified_at: {
+                    type: TYPES.string,
+                    description: 'Mobile verification date of the user',
                 },
             },
         },

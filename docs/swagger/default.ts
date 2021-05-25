@@ -227,7 +227,14 @@ const addPath = (
 
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const { description, schema, example } = responses[index];
+        const { description, schema, example, examples } = responses[index];
+        const samples: {
+            example?: any;
+            examples?: any;
+        } = {};
+
+        if (example) samples.example = example;
+        if (examples) samples.examples = examples;
 
         PATH[method].responses[index] = {
             description: description ? description : '',
@@ -236,7 +243,7 @@ const addPath = (
                     schema: {
                         $ref: getDefinition(schema),
                     },
-                    example: example ?? undefined,
+                    ...samples,
                 },
             },
         };

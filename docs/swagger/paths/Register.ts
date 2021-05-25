@@ -1,7 +1,7 @@
 import { TAGS_NAMES } from '../config';
 import { METHODS } from '../default';
 
-const key = 'register';
+const key = 'user';
 const method = METHODS.post;
 const tag = TAGS_NAMES.RESOURCES;
 const summary = 'Register new user';
@@ -20,9 +20,21 @@ const responses = {
     409: {
         description: 'Email/Mobile already exist',
         schema: 'Response422',
-        example: {
-            code: 422,
-            message: 'Email/Mobile already exist',
+        examples: {
+            EMAIL_EXIST: {
+                description: 'Email exists',
+                value: {
+                    code: 409,
+                    message: 'Email already exist',
+                },
+            },
+            MOBILE_EXIST: {
+                description: 'Mobile exists',
+                value: {
+                    code: 409,
+                    message: 'Mobile already exist',
+                },
+            },
         },
     },
     422: {

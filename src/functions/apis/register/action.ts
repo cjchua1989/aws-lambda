@@ -33,7 +33,7 @@ export class RegisterAction {
         user.name = request.name;
         user.email = request.email;
         user.mobile = request.mobile;
-        user.password = Bcrypt.generate(request.password);
+        user.password = Bcrypt.generateHashPassword(request.password);
 
         await user.save();
 

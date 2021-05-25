@@ -1,12 +1,11 @@
-register:
-  handler: src/functions/apis/register/handler.execute
+view:
+  handler: src/functions/apis/view/handler.execute
   events:
     - http:
-        path: /user
-        method: post
+        path: /user/{id}
+        method: get
         timeout: 300
         cors: true
-        # authorizer: ${self:custom.AUTHORIZE}
 
   environment:
     MYSQLDB_URL: ${self:custom.MYSQLDB_URL}

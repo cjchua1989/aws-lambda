@@ -10,7 +10,8 @@ export class UserRepository extends Repository<UserModel> {
             .getOne();
     }
 
-    async checkExist(column): Promise<boolean> {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    async checkExist(column: object): Promise<boolean> {
         const count = await this.count({
             where: column,
         });
@@ -23,6 +24,13 @@ export class UserRepository extends Repository<UserModel> {
             uuid: uuid,
         });
         await this.softDelete(user);
+        return user;
+    }
+
+    async getUserByUuid(uuid: string): Promise<UserModel> {
+        const user = await this.findOneOrFail({
+            uuid: uuid,
+        });
         return user;
     }
 }

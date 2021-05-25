@@ -2,9 +2,9 @@ import { TAGS_NAMES } from '../config';
 import { METHODS } from '../default';
 
 const key = 'user';
-const method = METHODS.delete;
+const method = METHODS.get;
 const tag = TAGS_NAMES.RESOURCES;
-const summary = 'Soft delete user';
+const summary = 'Get user details';
 const parameters = {};
 const responses = {
     409: {
@@ -16,16 +16,18 @@ const responses = {
         },
     },
     200: {
-        description: 'Success deleted',
-        schema: 'DeleteResponse',
+        description: 'Return user records',
+        schema: 'ViewResponse',
         example: {
             code: 200,
-            message: 'User successfully deleted',
+            message: 'Successfully user found',
             data: {
-                user_id: 'd4caf105-adc8-48c0-8b1e-7d5a7b6c2a15',
-                name: 'Jillian',
-                email: 'Alfred_DAmore@gmail.com',
-                mobile: '09970269381',
+                id: '4eeeca80-568a-4cce-8d55-1d0af4e5e7ef',
+                name: 'Rusty',
+                email: 'Rory32@gmail.com',
+                mobile: '09179509311',
+                email_verified_at: '2021-05-24 11:48:05',
+                mobile_verified_at: '2021-05-24 11:48:05',
             },
         },
     },

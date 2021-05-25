@@ -7,7 +7,7 @@ module.exports.default = {
             type: TYPES.string,
             description: 'Deleted data of the user',
             properties: {
-                user_id: {
+                id: {
                     type: TYPES.string,
                     description: 'User id of the user',
                 },

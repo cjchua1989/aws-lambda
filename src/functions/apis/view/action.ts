@@ -1,15 +1,17 @@
 import { Connection } from 'typeorm';
 import { UserRepository } from '../../../repositories/UserRepository';
-import { UserNotExist } from './responses';
+import { UserNotExist } from '../view/responses';
 
 interface OutputData {
-    user_id: string;
+    id: string;
     name: string;
     email: string;
     mobile: string;
+    email_verified_at: string;
+    mobile_verified_at: string;
 }
 
-export class DeleteAction {
+export class ViewAction {
     private connection: Connection;
     private repository: UserRepository;
 
@@ -19,16 +21,18 @@ export class DeleteAction {
     }
 
     async execute(uuid: string): Promise<OutputData> {
-        const userExist = await this.repository.checkExist({ uuid: uuid });
-        if (!userExist) throw new UserNotExist();
+        const idExist = await this.repository.checkExist({ uuid: uuid });
+        if (!idExist) throw new UserNotExist();
 
-        const user = await this.repository.deleteUser(uuid);
+        const user = await this.repository.getUserByUuid(uuid);
 
         return {
-            user_id: user.uuid,
+            id: user.uuid,
             name: user.name,
             email: user.email,
             mobile: user.mobile,
+            email_verified_at: user.mobile,
+            mobile_verified_at: user.mobile,
         };
     }
 }

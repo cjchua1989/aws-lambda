@@ -12,6 +12,7 @@ const {
     MIGRATION_MYSQLDB_USERNAME,
     MIGRATION_MYSQLDB_PASSWORD,
     MIGRATION_MYSQLDB_NAME,
+    MIGRATION_MYSQLDB_PORT,
 } = process.env;
 
 async function retrieve(path) {
@@ -42,6 +43,7 @@ async function execute() {
         user: MIGRATION_MYSQLDB_USERNAME,
         password: await retrieve(MIGRATION_MYSQLDB_PASSWORD),
         database: MIGRATION_MYSQLDB_NAME,
+        port: MIGRATION_MYSQLDB_PORT,
     });
 
     migrations.init(connection, `${__dirname}/migrations`);

@@ -116,7 +116,9 @@ enum PARAMETER_TYPES {
 interface PathQuery {
     in: PARAMETER_TYPES;
     name: string;
-    type: TYPES;
+    schema: {
+        type: TYPES;
+    },
     required: boolean;
     description: string;
     enum?: string[];
@@ -194,7 +196,9 @@ const addPath = (
                     PATH[method].parameters.push({
                         in: PARAMETER_TYPES.path,
                         name: row.name,
-                        type: TYPES.string,
+                        schema: {
+                            type: TYPES.string,
+                        },
                         required: true,
                         description: row.description,
                         example: row.example ?? undefined,
@@ -203,12 +207,14 @@ const addPath = (
                 case PARAMETER_TYPES.query:
                     if (!PATH[method].parameters) PATH[method].parameters = [];
                     const query: PathQuery = {
-                        in: PARAMETER_TYPES.query,
+                        in: PARAMETER_TYPES.header,
                         name: row.name,
-                        type: TYPES.string,
-                        required: false,
+                        required: true,
                         description: row.description,
                         example: row.example ?? undefined,
+                        schema: {
+                            type: TYPES.string,
+                        },
                     };
 
                     if (row.enum) query.enum = row.enum;

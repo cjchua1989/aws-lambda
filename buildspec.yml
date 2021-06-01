@@ -1,6 +1,8 @@
 version: 0.2
 phases:
   install:
+    runtime-versions:
+      nodejs: 12
     commands:
       - ASSUME_ROLE_ARN=${DEPLOY_ROLE}
       - TEMP_ROLE=`aws sts assume-role --role-arn $ASSUME_ROLE_ARN --role-session-name lamda_deployer`
@@ -9,7 +11,7 @@ phases:
       - export AWS_SECRET_ACCESS_KEY=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SecretAccessKey')
       - export AWS_SESSION_TOKEN=$(echo "${TEMP_ROLE}" | jq -r '.Credentials.SessionToken')
       - export AWS_ACCESS_PROFILE="TEMP_AWS_PROFILE"
-      - npm install -g serverless@1.67.0 && npm install -g mocha && npm install --production
+      - npm install -g serverless@2.43.1 && npm install --production
       - AWS_CREDENTIAL_FILE=~/.aws/credentials
       - mkdir ~/.aws
       - touch $AWS_CREDENTIAL_FILE
@@ -31,3 +33,7 @@ phases:
       - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-apis.yml
       - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-events.yml
       - serverless deploy --stage $STAGE --aws-profile $AWS_ACCESS_PROFILE --region $REGION --config serverless-crons.yml
+  post_build:
+    commands:
+      - npm install aws-sdk
+      - npm run migrate

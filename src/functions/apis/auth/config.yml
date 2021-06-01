@@ -4,7 +4,6 @@ auth:
     - http:
         path: /auth
         method: post
-        timeout: 300
         cors: true
 
   environment:

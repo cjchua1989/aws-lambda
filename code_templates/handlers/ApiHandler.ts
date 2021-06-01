@@ -8,7 +8,6 @@ export class ApiHandler implements Handler {
     - http:
         path: /<path>
         method: <method>
-        timeout: 300
         cors: true
 
   environment:    

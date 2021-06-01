@@ -1,6 +1,7 @@
 import * as YAML from 'yaml';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Type } from 'yaml/util';
 
 import { OPENAPI, PROJECT_INFO, TAGS, getDefinitions, getPaths, DEFAULTS } from './config';
 
@@ -51,15 +52,21 @@ async function generate() {
         paths = addPath(row.key, row.tag, row.method, row.summary, row.parameters, row.responses, paths);
     }
 
-    const swagger = YAML.stringify({
-        openapi: OPENAPI,
-        info: PROJECT_INFO,
-        tags: TAGS,
-        paths,
-        components: {
-            schemas: definitions,
+    YAML.scalarOptions.str.defaultType = Type.QUOTE_DOUBLE;
+    const swagger = YAML.stringify(
+        {
+            openapi: OPENAPI,
+            info: PROJECT_INFO,
+            tags: TAGS,
+            paths,
+            components: {
+                schemas: definitions,
+            },
         },
-    });
+        {
+            simpleKeys: true,
+        },
+    );
 
     fs.writeFile(path.join(__dirname, 'swagger.yml'), swagger, function (err) {
         if (err) throw err;

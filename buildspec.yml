@@ -2,7 +2,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 12
+      nodejs: 14
     commands:
       - ASSUME_ROLE_ARN=${DEPLOY_ROLE}
       - TEMP_ROLE=`aws sts assume-role --role-arn $ASSUME_ROLE_ARN --role-session-name lamda_deployer`

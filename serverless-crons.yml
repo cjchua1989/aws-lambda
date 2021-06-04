@@ -27,7 +27,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   versionFunctions: false
   endpointType: REGIONAL
   memorySize: 128 # optional, in MB, default is 1024

@@ -118,9 +118,9 @@ interface PathQuery {
     name: string;
     schema: {
         type: TYPES;
-    },
-    required: boolean;
-    description: string;
+    };
+    required?: boolean;
+    description?: string;
     enum?: string[];
     example?: any;
 }
@@ -183,8 +183,8 @@ const addPath = (
                     PATH[method].parameters.push({
                         in: PARAMETER_TYPES.header,
                         name: row.name,
-                        required: true,
-                        description: row.description,
+                        required: row.required ?? false,
+                        description: row.description ?? '',
                         example: row.example ?? undefined,
                         schema: {
                             type: TYPES.string,
@@ -199,18 +199,18 @@ const addPath = (
                         schema: {
                             type: TYPES.string,
                         },
-                        required: true,
-                        description: row.description,
+                        required: row.required ?? false,
+                        description: row.description ?? '',
                         example: row.example ?? undefined,
                     });
                     break;
                 case PARAMETER_TYPES.query:
                     if (!PATH[method].parameters) PATH[method].parameters = [];
                     const query: PathQuery = {
-                        in: PARAMETER_TYPES.header,
+                        in: PARAMETER_TYPES.query,
                         name: row.name,
-                        required: true,
-                        description: row.description,
+                        required: row.required ?? false,
+                        description: row.description ?? '',
                         example: row.example ?? undefined,
                         schema: {
                             type: TYPES.string,

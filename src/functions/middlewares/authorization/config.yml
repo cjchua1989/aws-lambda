@@ -1,2 +1,0 @@
-authorization:
-  handler: src/functions/middlewares/authorization/handler.execute

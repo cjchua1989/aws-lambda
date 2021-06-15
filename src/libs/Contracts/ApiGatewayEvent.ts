@@ -2,6 +2,15 @@ interface Headers {
     Authorization?: string;
 }
 
+export interface RequestContextContent {
+    user_id?: string;
+    session_id?: string;
+}
+
+interface RequestContext {
+    authorizer: RequestContextContent;
+}
+
 export interface ApiGatewayEvent {
     headers?: Headers;
     body: string;
@@ -11,4 +20,5 @@ export interface ApiGatewayEvent {
     pathParameters?: {
         [key: string]: string;
     };
+    requestContext?: RequestContext;
 }

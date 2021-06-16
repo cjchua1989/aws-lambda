@@ -9,4 +9,8 @@ export class UserRepository extends Repository<UserModel> {
             .orWhere('users.mobile = :username', { username })
             .getOne();
     }
+
+    async getUserByUserId(uuid: string): Promise<UserModel | undefined> {
+        return this.createQueryBuilder('users').where('users.uuid = uuid', { uuid }).getOne();
+    }
 }

@@ -1,5 +1,11 @@
-refresh_token_authorization:
-  handler: src/functions/middlewares/refresh_token_authorization/handler.execute
+get_profile:
+  handler: src/functions/apis/get_profile/handler.execute
+  events:
+    - http:
+        path: /me
+        method: get
+        cors: true
+        authorizer: ${self:custom.ACCESS_TOKEN_AUTHORIZE}
 
   environment:
     MYSQLDB_URL: ${self:custom.MYSQLDB_URL}

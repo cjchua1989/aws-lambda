@@ -1,5 +1,7 @@
 import { RequestContextContent } from '../libs/Contracts/ApiGatewayEvent';
 import { Connection } from 'typeorm';
+import { ApiTokenInvalidError } from '../libs/Errors/ApiTokenInvalidError';
+import { UserRepository } from '../repositories/UserRepository';
 
 export enum Effect {
     ALLOW = 'Allow',
@@ -75,7 +77,13 @@ export class MiddlewareService {
     }
 
     async checkUserUsingJWT(user_id: string): Promise<UserResult> {
-        // /* TODO: Add your code that wiil validate user id  */
+        const userRepository = this.connection.getCustomRepository(UserRepository);
+        const userExist = await userRepository.getUserByUserId(user_id);
+
+        // If user doesn't exist, throw access denied
+        if (!userExist) {
+            throw new ApiTokenInvalidError();
+        }
 
         return {
             user_id,

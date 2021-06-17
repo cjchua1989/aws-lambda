@@ -36,3 +36,14 @@ CARBON_TIMEZONE: ${env:CARBON_TIMEZONE}
 #  type: TOKEN
 #  identitySource: method.request.header.Authorization
 #  identityValidationExpression: Bearer (.*)
+
+warmup:
+  default:
+    folderName: '.warmup'
+    cleanFolder: false
+    memorySize: 256
+    name: ${env:SERVICE_NAME}-${env:STAGE}-warmer
+    enabled: true
+    concurrency: 10
+    package:
+      individually: false

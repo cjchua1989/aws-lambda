@@ -16,6 +16,7 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-plugin-typescript
   - serverless-offline
+  - serverless-plugin-warmup
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
 #org: your-org-name

@@ -3,6 +3,7 @@ interface Headers {
 }
 
 export interface ApiGatewayEvent {
+    source?: string;
     headers?: Headers;
     body: string;
     queryStringParameters?: {
@@ -11,4 +12,10 @@ export interface ApiGatewayEvent {
     pathParameters?: {
         [key: string]: string;
     };
+}
+
+export interface Event {
+    source?: string;
+    methodArn: string;
+    authorizationToken: string;
 }

@@ -25,13 +25,14 @@ export function THROW_API_ERROR(error: HttpResponse): APIHttpResponse {
     Logger.error('APIResponse.Error', { error });
 
     const code = error.code ? error.code : 500;
+    const statusCode = error.statusCode ?? code;
     const { message } = error;
 
     if (code === 422) {
         const errors = error.errors;
         return {
             ...API_500,
-            statusCode: code,
+            statusCode,
             body: JSON.stringify({
                 code,
                 message,
@@ -42,7 +43,7 @@ export function THROW_API_ERROR(error: HttpResponse): APIHttpResponse {
 
     return {
         ...API_500,
-        statusCode: code,
+        statusCode,
         body: JSON.stringify({
             code,
             message,
@@ -55,7 +56,7 @@ export function API_RESPONSE(data: HttpResponse): APIHttpResponse {
 
     return {
         ...API_200,
-        statusCode: 200,
+        statusCode: data.statusCode ?? 200,
         body: JSON.stringify(data),
     };
 }

@@ -6,8 +6,10 @@ import { TokenData } from '../../../services/MiddlewareService';
 import { JWT } from '../../../libs/JWT';
 import { TokenType } from '../../../helper/Enums';
 import { UserModel } from '../../../models/UserModel';
+import { TokenService } from "../../../services/TokenService";
+import { ApiGatewayEvent } from "../../../libs/Contracts/ApiGatewayEvent";
 
-interface LoginResult {
+interface AuthResponse {
     user: UserModel;
     access_token: string;
     refresh_token: string;
@@ -22,7 +24,7 @@ export class AuthAction {
         this.repository = connection.getCustomRepository(UserRepository);
     }
 
-    async execute(username: string, password: string): Promise<LoginResult> {
+    async execute(username: string, password: string): Promise<AuthResponse> {
         const user = await this.repository.getUserByUserName(username);
         if (!user) throw new AuthAccessDenied();
 
@@ -31,17 +33,8 @@ export class AuthAction {
         /**
          * Generate access and refresh tokens
          */
-        const access_token = await JWT.generateToken<TokenData>({
-            type: TokenType.ACCESS_TOKEN,
-            user_id: user.uuid,
-        });
-        const refresh_token = await JWT.generateToken<TokenData>(
-            {
-                type: TokenType.REFRESH_TOKEN,
-                user_id: user.uuid,
-            },
-            '30d',
-        );
+        const access_token = await TokenService.generateAccessToken(user.uuid);
+        const refresh_token = await TokenService.generateRefreshToken(user.uuid);
         return {
             user,
             access_token,

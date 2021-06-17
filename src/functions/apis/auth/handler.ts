@@ -22,8 +22,8 @@ export async function execute(event: ApiGatewayEvent): Promise<APIHttpResponse> 
                 email: user.email,
                 mobile: user.mobile,
             },
-            access_token: access_token,
-            refresh_token: refresh_token,
+            access_token,
+            refresh_token,
         });
     } catch (error) {
         return THROW_API_ERROR(error);

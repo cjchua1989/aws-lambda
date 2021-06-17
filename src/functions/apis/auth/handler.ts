@@ -13,17 +13,17 @@ export async function execute(event: ApiGatewayEvent): Promise<APIHttpResponse> 
         const request: AuthRequest = Validate(JSON.parse(event.body));
         const connection = await Databases.getConnection();
         const action = new AuthAction(connection);
-        const result = await action.execute(request.username, request.password);
+        const { user, access_token, refresh_token } = await action.execute(request.username, request.password);
 
         return API_RESPONSE({
             ...Responses.STATUS_200,
             user: {
-                name: result.user.name,
-                email: result.user.email,
-                mobile: result.user.mobile,
+                name: user.name,
+                email: user.email,
+                mobile: user.mobile,
             },
-            access_token: result.access_token,
-            refresh_token: result.refresh_token,
+            access_token: access_token,
+            refresh_token: refresh_token,
         });
     } catch (error) {
         return THROW_API_ERROR(error);

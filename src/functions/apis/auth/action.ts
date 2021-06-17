@@ -2,12 +2,8 @@ import { Connection } from 'typeorm';
 import { UserRepository } from '../../../repositories/UserRepository';
 import { AuthAccessDenied } from './responses';
 import * as bcrypt from 'bcrypt';
-import { TokenData } from '../../../services/MiddlewareService';
-import { JWT } from '../../../libs/JWT';
-import { TokenType } from '../../../helper/Enums';
 import { UserModel } from '../../../models/UserModel';
-import { TokenService } from "../../../services/TokenService";
-import { ApiGatewayEvent } from "../../../libs/Contracts/ApiGatewayEvent";
+import { TokenService } from '../../../services/TokenService';
 
 interface AuthResponse {
     user: UserModel;

@@ -2,6 +2,7 @@ import { Databases } from '../../../libs/Mysql';
 import { API_RESPONSE, THROW_API_ERROR } from '../../../libs/Response';
 import { APIHttpResponse } from '../../../libs/Contracts/APIHttpResponse';
 import { ApiGatewayEvent } from '../../../libs/Contracts/ApiGatewayEvent';
+import { WarmerService } from '../../../services/WarmerService';
 
 import Validate from './validate';
 import { Responses } from './responses';
@@ -10,6 +11,7 @@ import { AuthAction } from './action';
 
 export async function execute(event: ApiGatewayEvent): Promise<APIHttpResponse> {
     try {
+        WarmerService.execute(event);
         const request: AuthRequest = Validate(JSON.parse(event.body));
         const connection = await Databases.getConnection();
         const action = new AuthAction(connection);

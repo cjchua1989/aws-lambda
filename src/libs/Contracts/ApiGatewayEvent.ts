@@ -12,6 +12,7 @@ interface RequestContext {
 }
 
 export interface ApiGatewayEvent {
+    source?: string;
     headers?: Headers;
     body: string;
     queryStringParameters?: {
@@ -21,4 +22,10 @@ export interface ApiGatewayEvent {
         [key: string]: string;
     };
     requestContext?: RequestContext;
+}
+
+export interface Event {
+    source?: string;
+    methodArn: string;
+    authorizationToken: string;
 }

@@ -25,9 +25,10 @@ export enum SelectAttribute {
 }
 
 export class DynamoRepository<T extends DynamoModel> {
-    static fieldsToExpression(
-        fields: string[],
-    ): { FieldExpressionAttributeNames: ExpressionAttributeNameMap; ProjectionExpression: string } {
+    static fieldsToExpression(fields: string[]): {
+        FieldExpressionAttributeNames: ExpressionAttributeNameMap;
+        ProjectionExpression: string;
+    } {
         const FieldExpressionAttributeNames: ExpressionAttributeNameMap = {};
         const ProjectionExpression: string[] = [];
 
@@ -41,9 +42,10 @@ export class DynamoRepository<T extends DynamoModel> {
             ProjectionExpression: ProjectionExpression.join(', '),
         };
     }
-    static filtersToExpression(
-        filters: Filter,
-    ): { FilterExpressionAttributeValues: ExpressionAttributeNameMap; FilterExpression: string } {
+    static filtersToExpression(filters: Filter): {
+        FilterExpressionAttributeValues: ExpressionAttributeNameMap;
+        FilterExpression: string;
+    } {
         const FilterExpression: string[] = [];
         const FilterExpressionAttributeValues: ExpressionAttributeNameMap = {};
 
@@ -59,9 +61,10 @@ export class DynamoRepository<T extends DynamoModel> {
             FilterExpression: FilterExpression.join(' AND '),
         };
     }
-    static keysToExpression(
-        keys: Filter,
-    ): { KeyExpressionAttributeValues: ExpressionAttributeNameMap; KeyConditionExpression: string } {
+    static keysToExpression(keys: Filter): {
+        KeyExpressionAttributeValues: ExpressionAttributeNameMap;
+        KeyConditionExpression: string;
+    } {
         const KeyConditionExpression: string[] = [];
         const KeyExpressionAttributeValues: ExpressionAttributeNameMap = {};
 

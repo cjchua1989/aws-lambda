@@ -9,8 +9,11 @@ import { SwaggerPathTemplate } from './code_templates/SwaggerPathTemplate';
 import { SwaggerResponseTemplate } from './code_templates/SwaggerResponseTemplate';
 import { DynamoModelTemplate } from './code_templates/DynamoModelTemplate';
 import { DynamoRepositoryTemplate } from './code_templates/DynamoRepositoryTemplate';
+import { SequenceTemplate } from './code_templates/SequenceTemplate';
 
-const commands = yargs(process.argv.slice(2));
+const commands = yargs(process.argv.slice(2)).options({
+    docs: { type: 'boolean', default: false, describe: 'Generate Swagger request, response & path' },
+});
 
 try {
     commands.command(
@@ -43,6 +46,24 @@ try {
             const template = new HandlerTemplate(<string>argv.name, Type.API);
             template.generate();
             console.log('API Handler successfully created');
+
+            if (argv.docs) {
+                const request = new SwaggerRequestTemplate(<string>argv.name);
+                request.generate();
+                console.log('Swagger definition successfully created');
+
+                const response = new SwaggerResponseTemplate(<string>argv.name);
+                response.generate();
+                console.log('Swagger definition successfully created');
+
+                const path = new SwaggerPathTemplate(<string>argv.name);
+                path.generate();
+                console.log('Swagger path successfully created');
+
+                const sequence = new SequenceTemplate(<string>argv.name);
+                sequence.generate();
+                console.log('Sequence successfully created');
+            }
         },
     );
 
@@ -156,6 +177,18 @@ try {
             template.generate();
 
             console.log('Swagger path successfully created');
+        },
+    );
+
+    commands.command(
+        'make:sequence <name>',
+        'Create a sequence file',
+        () => {},
+        (argv: Arguments) => {
+            const template = new SequenceTemplate(<string>argv.name);
+            template.generate();
+
+            console.log('Sequence successfully created');
         },
     );
 

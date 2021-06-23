@@ -16,6 +16,14 @@ export enum FOLDERS {
     PROCESSED = 'processed',
 }
 
+interface MultipartMapParams {
+    PartNumber: number;
+    ETag?: string;
+}
+export interface MultipartMapParts {
+    Parts: MultipartMapParams[];
+}
+
 /**
  * Generate S3 Service
  *
@@ -256,4 +264,84 @@ export async function deleteFile(folder: FOLDERS, filename: string): Promise<boo
             resolve(true);
         });
     });
+}
+
+/**
+ * Create Multipart Session
+ *
+ * @param folder
+ * @param filename
+ * @param content_type
+ * @returns {Promise<AWS.S3.Types.CreateMultipartUploadOutput>}
+ */
+export async function createMultipartUpload(
+    folder: FOLDERS,
+    filename: string,
+    content_type: string,
+): Promise<AWS.S3.Types.CreateMultipartUploadOutput> {
+    const params = {
+        Key: `${folder}/${filename}`,
+        ContentType: content_type,
+        Bucket: S3_BUCKET,
+    };
+    const service = await getService();
+    return await service.createMultipartUpload(params).promise();
+}
+
+/**
+ * Multipart Upload
+ *
+ * @param folder
+ * @param filename
+ * @param Body
+ * @param PartNumber
+ * @param UploadId
+ * @returns {Promise<AWS.S3.Types.UploadPartOutput>}
+ */
+export async function uploadPart(
+    folder: FOLDERS,
+    filename: string,
+    Body: string,
+    PartNumber: number,
+    UploadId: string,
+): Promise<AWS.S3.Types.UploadPartOutput> {
+    const params = {
+        Key: `${folder}/${filename}`,
+        Bucket: S3_BUCKET,
+        Body,
+        PartNumber,
+        UploadId,
+    };
+    const service = await getService();
+    return await service.uploadPart(params).promise();
+}
+
+/**
+ * Complete MultipartUpload
+ *
+ * @param folder
+ * @param filename
+ * @param UploadId
+ * @param MultipartUpload
+ * @returns {Promise<AWS.S3.Types.CompleteMultipartUploadOutput>}
+ */
+export async function completeMultipartUpload(
+    folder: FOLDERS,
+    filename: string,
+    UploadId: string,
+    MultipartUpload: MultipartMapParts,
+): Promise<AWS.S3.Types.CompleteMultipartUploadOutput> {
+    try {
+        const params = {
+            Key: `${folder}/${filename}`,
+            Bucket: S3_BUCKET,
+            MultipartUpload,
+            UploadId,
+        };
+        const service = await getService();
+        return await service.completeMultipartUpload(params).promise();
+    } catch (error) {
+        Logger.error('S3.completeMultipartUpload :', error);
+        throw error;
+    }
 }

@@ -29,10 +29,28 @@ TABLE_NAME: ${env:TABLE_NAME}
 #CARBON
 CARBON_TIMEZONE: ${env:CARBON_TIMEZONE}
 
-# Uncomment this enable the authorization #
-# AUTHORIZE:
-#  name: authorization
-#  resultTtlInSeconds: 0
-#  type: TOKEN
-#  identitySource: method.request.header.Authorization
-#  identityValidationExpression: Bearer (.*)
+# Uncomment this enable the access_token_authorization #
+ACCESS_TOKEN_AUTHORIZE:
+  name: access_token_authorization
+  resultTtlInSeconds: 0
+  type: TOKEN
+  identitySource: method.request.header.Authorization
+  identityValidationExpression: Bearer (.*)
+
+REFRESH_TOKEN_AUTHORIZE:
+  name: access_token_authorization
+  resultTtlInSeconds: 0
+  type: TOKEN
+  identitySource: method.request.header.Authorization
+  identityValidationExpression: Bearer (.*)
+
+warmup:
+  default:
+    folderName: '.warmup'
+    cleanFolder: false
+    memorySize: 256
+    name: ${env:SERVICE_NAME}-${env:STAGE}-warmer
+    enabled: true
+    concurrency: 10
+    package:
+      individually: false

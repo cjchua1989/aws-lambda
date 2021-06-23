@@ -1,10 +1,11 @@
-auth:
-  handler: src/functions/apis/auth/handler.execute
+get_profile:
+  handler: src/functions/apis/get_profile/handler.execute
   events:
     - http:
-        path: /auth
-        method: post
+        path: /me
+        method: get
         cors: true
+        authorizer: ${self:custom.ACCESS_TOKEN_AUTHORIZE}
 
   environment:
     MYSQLDB_URL: ${self:custom.MYSQLDB_URL}
@@ -12,8 +13,3 @@ auth:
     MYSQLDB_USERNAME: ${self:custom.MYSQLDB_USERNAME}
     MYSQLDB_PASSWORD: ${self:custom.MYSQLDB_PASSWORD}
     MYSQLDB_PORT: ${self:custom.MYSQLDB_PORT}
-
-  #warmup enabled
-  warmup:
-    default:
-      enabled: true

@@ -1,7 +1,8 @@
 import { ValidationErrorItem } from 'joi';
+import * as dot from 'dot-object';
 
 export interface ErrorObjects {
-    [propName: string]: string;
+    [propName: string]: string | ErrorObjects;
 }
 
 export class ParameterError {
@@ -15,8 +16,7 @@ export class ParameterError {
 
         for (let i = 0; i < errors.length; i += 1) {
             const error = errors[i];
-            const key = error.context && error.context.key ? error.context.key : undefined;
-            if (key) this.errors[key] = error.message;
+            dot.str(error.path.join('.'), error.message, this.errors);
         }
     }
 }

@@ -26,6 +26,7 @@ export class UserListDynamoAction {
             pagination: {
                 limit: response.limit,
                 key: response.key,
+                forward: response.forward,
             },
             data: response.data.map((user) => {
                 return {

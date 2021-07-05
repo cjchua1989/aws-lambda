@@ -4,7 +4,7 @@ import { DynamoRepository, DynamoPaginationInfo } from './DynamoRepository';
 export class DynamoUserRepository extends DynamoRepository<DynamoUserModel> {
     async getPaginateList(
         page_info: DynamoPaginationInfo,
-    ): Promise<{ limit: number; key: string; data: DynamoUserModel[] }> {
+    ): Promise<{ limit: number; key: string; forward: boolean; data: DynamoUserModel[] }> {
         const item = await this.paginateQuery(page_info, 'lookup_key = :lookup_key', {
             ':lookup_key': LOOKUP_KEY,
         });
@@ -17,6 +17,7 @@ export class DynamoUserRepository extends DynamoRepository<DynamoUserModel> {
         return {
             limit: page_info.limit,
             key: item.key,
+            forward: item.forward,
             data,
         };
     }

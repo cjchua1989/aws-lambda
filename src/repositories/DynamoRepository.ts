@@ -33,6 +33,7 @@ export interface DynamoPaginationInfo {
     page?: string;
     key: string;
     limit: number;
+    forward: boolean;
 }
 
 export class DynamoRepository<T extends DynamoModel> {
@@ -245,7 +246,7 @@ export class DynamoRepository<T extends DynamoModel> {
         Select: SelectAttribute = SelectAttribute.ALL_ATTRIBUTES,
         ProjectionExpression: string | undefined = undefined,
         ExpressionAttributeNames: undefined | DocumentClient.ExpressionAttributeNameMap = undefined,
-    ): Promise<{ data: DocumentClient.ItemList | undefined; key: string }> {
+    ): Promise<{ data: DocumentClient.ItemList | undefined; key: string; forward: boolean }> {
         const params: DocumentClient.QueryInput = {
             TableName: TABLE_NAME,
             KeyConditionExpression,
@@ -263,15 +264,16 @@ export class DynamoRepository<T extends DynamoModel> {
 
         let data: DocumentClient.ItemList = [];
         let key = '';
+        let forward = true;
 
         if (PageInfo.page === PAGE_ACTION.PREV) {
+            forward = false;
             params.ScanIndexForward = false;
             if (PageInfo.key === '') {
                 const item_count = await this.countQuery(KeyConditionExpression, ExpressionAttributeValues, IndexName);
                 params.Limit = item_count % PageInfo.limit > 0 ? item_count % PageInfo.limit : PageInfo.limit;
-            } else {
-                params.Limit = PageInfo.limit;
             }
+            if (PageInfo.forward) params.Limit = PageInfo.limit + 1;
 
             const result = await docClient.query(params).promise();
             if (result.LastEvaluatedKey) key = JSON.stringify(result.LastEvaluatedKey);
@@ -279,11 +281,18 @@ export class DynamoRepository<T extends DynamoModel> {
                 data = result.Items.reverse().slice(0, PageInfo.limit);
             }
         } else {
+            forward = true;
+            if (!PageInfo.forward) params.Limit = PageInfo.limit + 1;
+
             const result = await docClient.query(params).promise();
             if (result.LastEvaluatedKey) key = JSON.stringify(result.LastEvaluatedKey);
-            if (result.Items) data = result.Items;
+            if (result.Items) {
+                if (!PageInfo.forward) result.Items.shift();
+
+                data = result.Items;
+            }
         }
 
-        return { data, key };
+        return { data, key, forward };
     }
 }

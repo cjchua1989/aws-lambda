@@ -245,7 +245,7 @@ export class DynamoRepository<T extends DynamoModel> {
         Select: SelectAttribute = SelectAttribute.ALL_ATTRIBUTES,
         ProjectionExpression: string | undefined = undefined,
         ExpressionAttributeNames: undefined | DocumentClient.ExpressionAttributeNameMap = undefined,
-    ): Promise<{ data: DocumentClient.ItemList | undefined; key: string}> {
+    ): Promise<{ data: DocumentClient.ItemList | undefined; key: string }> {
         const params: DocumentClient.QueryInput = {
             TableName: TABLE_NAME,
             KeyConditionExpression,
@@ -262,8 +262,7 @@ export class DynamoRepository<T extends DynamoModel> {
         }
 
         let data: DocumentClient.ItemList = [];
-        let key:string = '';
-
+        let key = '';
 
         if (PageInfo.page === PAGE_ACTION.PREV) {
             params.ScanIndexForward = false;

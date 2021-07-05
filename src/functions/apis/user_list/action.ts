@@ -39,7 +39,7 @@ export class UserListAction {
                     name: user.name,
                     email: user.email,
                     mobile: user.mobile,
-                }
+                };
             }),
         };
     }

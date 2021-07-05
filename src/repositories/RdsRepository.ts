@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 
 export interface PaginationInfo {
     page: number;
@@ -6,8 +6,7 @@ export interface PaginationInfo {
 }
 
 export async function PagenateResult<T>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    query: any,
+    query: SelectQueryBuilder<T>,
     page_info: PaginationInfo,
 ): Promise<{ max_page: number; current_page: number; data: T[] }> {
     let max_page = 1;

@@ -1,16 +1,8 @@
+
+import { PaginationInfo } from '../repositories/RdsRepository';
+import { PAGE_ACTION, DynamoPaginationInfo } from '../repositories/DynamoRepository';
+
 const PAGE_LIMIT: string = process.env.PAGE_LIMIT ?? '';
-
-interface QueryPaginationKeys {
-    page: number;
-    limit: number;
-}
-
-interface QueryPaginationDynamoKeys {
-    page: string;
-    limit: number;
-    key: string;
-    forward: boolean;
-}
 
 export interface PaginationQuery {
     page?: string;
@@ -23,7 +15,7 @@ export interface PaginationQuery {
 }
 
 export class HttpRequestHelper {
-    static extractPagination<T extends PaginationQuery>(queryStringParameters: T): QueryPaginationKeys {
+    static extractPagination<T extends PaginationQuery>(queryStringParameters: T): PaginationInfo {
         const query = queryStringParameters ? queryStringParameters : { page: '1', limit: PAGE_LIMIT };
         const page = query.page ? parseInt(query.page.trim()) : 1;
         const limit = query.limit ? parseInt(query.limit.trim()) : parseInt(PAGE_LIMIT);
@@ -33,11 +25,11 @@ export class HttpRequestHelper {
         };
     }
 
-    static extractDynamoPagination<T extends PaginationQuery>(queryStringParameters: T): QueryPaginationDynamoKeys {
+    static extractDynamoPagination<T extends PaginationQuery>(queryStringParameters: T): DynamoPaginationInfo {
         const query = queryStringParameters
             ? queryStringParameters
-            : { page: 'NEXT', limit: PAGE_LIMIT, key: '', forward: 'true' };
-        const page = query.page ? query.page : 'NEXT';
+            : { page: PAGE_ACTION.NEXT, limit: PAGE_LIMIT, key: '', forward: 'true' };
+        const page = query.page ? query.page === PAGE_ACTION.NEXT ? PAGE_ACTION.NEXT : PAGE_ACTION.PREV : PAGE_ACTION.NEXT;
         const limit = query.limit ? parseInt(query.limit.trim()) : parseInt(PAGE_LIMIT);
         const key = query.key ? query.key : '';
         const forward = query.forward ? (query.forward === 'true' ? true : false) : true;

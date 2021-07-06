@@ -345,3 +345,42 @@ export async function completeMultipartUpload(
         throw error;
     }
 }
+
+/**
+ * Copy Object to Another Bucket
+ *
+ * @param folder
+ * @param url
+ * @param destination
+ * @param source
+ * @returns {Promise<boolean>}
+ */
+export async function copyObjectToAnotherBucket(
+    folder: FOLDERS,
+    url: string,
+    destination: string,
+    source: string,
+): Promise<boolean> {
+    const service = await getService();
+
+    const params: AWS.S3.CopyObjectRequest = <AWS.S3.CopyObjectRequest>{
+        Bucket: destination,
+        CopySource: `/${source}/${folder}/${url}`,
+        Key: `${folder}/${url}`,
+    };
+
+    return new Promise((resolve, reject) => {
+        service.copyObject(params, (error, data) => {
+            if (error) {
+                Logger.error('S3.copyImageToAnotherBucket: Error', { error });
+
+                reject(new Error('Upload failed'));
+                return false;
+            }
+
+            Logger.error('S3.copyImageToAnotherBucket: Success', { data });
+
+            resolve(true);
+        });
+    });
+}

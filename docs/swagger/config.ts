@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Logger } from '../../src/Libs/Logger';
+import { Logger } from '../../src/libs/Logger';
 
 const OPENAPI = '3.0.0';
 const PROJECT_INFO = {

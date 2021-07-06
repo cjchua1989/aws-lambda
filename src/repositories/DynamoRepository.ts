@@ -30,7 +30,7 @@ export enum PAGE_ACTION {
 }
 
 export interface DynamoPaginationInfo {
-    page?: string;
+    page?: PAGE_ACTION;
     key: string;
     limit: number;
     forward: boolean;
@@ -288,7 +288,6 @@ export class DynamoRepository<T extends DynamoModel> {
             if (result.LastEvaluatedKey) key = JSON.stringify(result.LastEvaluatedKey);
             if (result.Items) {
                 if (!PageInfo.forward) result.Items.shift();
-
                 data = result.Items;
             }
         }

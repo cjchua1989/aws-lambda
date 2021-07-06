@@ -12,7 +12,7 @@
     "migrate:rollback": "node migrations.js down 100",
     "migrate:refresh": "npm run migrate:rollback && npm run migrate",
     "serve:app": "sls offline -c serverless-apis.yml",
-    "test": "jest"
+    "test": "jest --silent"
   },
   "author": "KnightRaven",
   "license": "ISC",

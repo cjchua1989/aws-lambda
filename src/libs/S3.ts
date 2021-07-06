@@ -16,6 +16,12 @@ export enum FOLDERS {
     PROCESSED = 'processed',
 }
 
+// BUCKETS
+export enum BUCKETS {
+    DESTINATION = '',
+    SOURCE = '',
+}
+
 interface MultipartMapParams {
     PartNumber: number;
     ETag?: string;
@@ -358,8 +364,8 @@ export async function completeMultipartUpload(
 export async function copyObjectToAnotherBucket(
     folder: FOLDERS,
     url: string,
-    destination: string,
-    source: string,
+    destination: BUCKETS,
+    source: BUCKETS,
 ): Promise<boolean> {
     const service = await getService();
 

@@ -24,6 +24,18 @@ export enum SelectAttribute {
     COUNT = 'COUNT',
 }
 
+export enum PAGE_ACTION {
+    NEXT = 'NEXT',
+    PREV = 'PREV',
+}
+
+export interface DynamoPaginationInfo {
+    page?: PAGE_ACTION;
+    key: string;
+    limit: number;
+    forward: boolean;
+}
+
 export class DynamoRepository<T extends DynamoModel> {
     static fieldsToExpression(fields: string[]): {
         FieldExpressionAttributeNames: ExpressionAttributeNameMap;
@@ -224,5 +236,62 @@ export class DynamoRepository<T extends DynamoModel> {
         } while (result.LastEvaluatedKey);
 
         return items;
+    }
+
+    public async paginateQuery(
+        PageInfo: DynamoPaginationInfo,
+        KeyConditionExpression: string,
+        ExpressionAttributeValues: DocumentClient.ExpressionAttributeValueMap,
+        IndexName: string | undefined = undefined,
+        Select: SelectAttribute = SelectAttribute.ALL_ATTRIBUTES,
+        ProjectionExpression: string | undefined = undefined,
+        ExpressionAttributeNames: undefined | DocumentClient.ExpressionAttributeNameMap = undefined,
+    ): Promise<{ data: DocumentClient.ItemList | undefined; key: string; forward: boolean }> {
+        const params: DocumentClient.QueryInput = {
+            TableName: TABLE_NAME,
+            KeyConditionExpression,
+            ExpressionAttributeValues,
+            IndexName,
+            Select,
+            ProjectionExpression,
+            ExpressionAttributeNames,
+            Limit: PageInfo.limit,
+        };
+
+        if (PageInfo.key !== '') {
+            params.ExclusiveStartKey = JSON.parse(PageInfo.key);
+        }
+
+        let data: DocumentClient.ItemList = [];
+        let key = '';
+        let forward = true;
+
+        if (PageInfo.page === PAGE_ACTION.PREV) {
+            forward = false;
+            params.ScanIndexForward = false;
+            if (PageInfo.key === '') {
+                const item_count = await this.countQuery(KeyConditionExpression, ExpressionAttributeValues, IndexName);
+                params.Limit = item_count % PageInfo.limit > 0 ? item_count % PageInfo.limit : PageInfo.limit;
+            }
+            if (PageInfo.forward) params.Limit = PageInfo.limit + 1;
+
+            const result = await docClient.query(params).promise();
+            if (result.LastEvaluatedKey) key = JSON.stringify(result.LastEvaluatedKey);
+            if (result.Items) {
+                data = result.Items.reverse().slice(0, PageInfo.limit);
+            }
+        } else {
+            forward = true;
+            if (!PageInfo.forward) params.Limit = PageInfo.limit + 1;
+
+            const result = await docClient.query(params).promise();
+            if (result.LastEvaluatedKey) key = JSON.stringify(result.LastEvaluatedKey);
+            if (result.Items) {
+                if (!PageInfo.forward) result.Items.shift();
+                data = result.Items;
+            }
+        }
+
+        return { data, key, forward };
     }
 }

@@ -11,6 +11,7 @@
     "migrate": "node migrations.js up",
     "migrate:rollback": "node migrations.js down 100",
     "migrate:refresh": "npm run migrate:rollback && npm run migrate",
+    "migrate:seed_user": "ts-node -r dotenv/config -e 'import { UserSeeder } from \"./src/seeder/UserSeeder\"; UserSeeder.seedMultipleUserData();'",
     "serve:app": "sls offline -c serverless-apis.yml",
     "test": "jest --silent"
   },

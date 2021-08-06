@@ -1,0 +1,14 @@
+user_list:
+  handler: src/functions/apis/user_list/handler.execute
+  events:
+    - http:
+        path: /user
+        method: get
+        cors: true
+
+  environment:
+      MYSQLDB_URL: ${self:custom.MYSQLDB_URL}
+      MYSQLDB_PORT: ${self:custom.MYSQLDB_PORT}
+      MYSQLDB_USERNAME: ${self:custom.MYSQLDB_USERNAME}
+      MYSQLDB_PASSWORD: ${self:custom.MYSQLDB_PASSWORD}
+      MYSQLDB_NAME: ${self:custom.MYSQLDB_NAME}

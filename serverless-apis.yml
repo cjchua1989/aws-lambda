@@ -48,6 +48,12 @@ provider:
     STAGE: ${self:custom.STAGE}
     TABLE_NAME: ${self:custom.TABLE_NAME}
     PAGE_LIMIT: ${self:custom.PAGE_LIMIT}
+    CAAS_OTP_URL: ${self:custom.CAAS_OTP_URL}
+    CAAS_WALLET_URL: ${self:custom.CAAS_WALLET_URL}
+    CAAS_CLIENT_KEY: ${self:custom.CAAS_CLIENT_KEY}
+    CAAS_CLIENT_SECRET: ${self:custom.CAAS_CLIENT_SECRET}
+    CAAS_ADMIN_KEY: ${self:custom.CAAS_ADMIN_KEY}
+    CAAS_ADMIN_SECRET: ${self:custom.CAAS_ADMIN_SECRET}
   vpc: # Optional VPC. But if you use VPC then both subproperties (securityGroupIds and subnetIds) are required
     securityGroupIds:
       - ${self:custom.SECURITY_GRP}

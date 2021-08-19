@@ -12,7 +12,7 @@ import { DynamoRepositoryTemplate } from './code_templates/DynamoRepositoryTempl
 import { SequenceTemplate } from './code_templates/SequenceTemplate';
 
 const commands = yargs(process.argv.slice(2)).options({
-    docs: { type: 'boolean', default: false, describe: 'Generate Swagger request, response & path' },
+    docs: { type: 'boolean', default: true, describe: 'Generate Swagger request, response & path' },
 });
 
 try {

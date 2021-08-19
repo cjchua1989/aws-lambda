@@ -1,5 +1,5 @@
-import {pascalCase} from "case-anything";
-import {existsSync, writeFileSync} from "fs";
+import { pascalCase } from 'case-anything';
+import { existsSync, writeFileSync } from 'fs';
 
 const content = `
 import { execute } from '../src/functions/<type>/<name>/handler';
@@ -39,7 +39,6 @@ describe('Test Description', () => {
 })
 `;
 
-
 export class UnitTestTemplate {
     private readonly className: string;
 
@@ -48,12 +47,8 @@ export class UnitTestTemplate {
     }
 
     generate(): void {
-        if (existsSync(`./tests/${this.className}.ts`))
-            throw new Error('Unit Test already existed');
+        if (existsSync(`./tests/${this.className}.ts`)) throw new Error('Unit Test already existed');
 
-        writeFileSync(
-            `./tests/${this.className}.ts`,
-            content.trim(),
-        );
+        writeFileSync(`./tests/${this.className}.ts`, content.trim());
     }
 }

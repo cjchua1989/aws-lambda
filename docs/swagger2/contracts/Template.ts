@@ -22,12 +22,9 @@ interface ServerObject {
     description: string;
 }
 
-interface RequestBodyObject {
-}
+interface RequestBodyObject {}
 
-interface ResponsesObject {
-
-}
+interface ResponsesObject {}
 
 interface OperationObject {
     tags: string[];
@@ -67,12 +64,18 @@ interface PathItemObject {
 }
 
 interface PathsObject {
-   [key: string]: PathItemObject;
+    [key: string]: PathItemObject;
+}
+
+interface Tag {
+    name: string;
+    description?: string;
 }
 
 export interface Template {
     openapi: string;
     info: InfoObject;
     servers: ServerObject[];
+    tags: Tag[];
     paths: PathsObject;
 }

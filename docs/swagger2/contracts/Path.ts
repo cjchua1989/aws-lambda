@@ -1,5 +1,3 @@
-import { example } from 'joi';
-
 export enum METHOD {
     post = 'post',
     get = 'get',
@@ -18,11 +16,15 @@ export interface BodyParameter<E extends ExampleParameter<unknown>> {
 }
 
 export interface Parameter {
-
+    name: string;
+    in: 'header' | 'path' | 'query' | 'cookie';
+    description?: string;
+    required: boolean;
+    allowEmptyValue: boolean;
 }
 
 export interface Parameters {
-    body?: BodyParameter<unknown>;
+    body?: BodyParameter<ExampleParameter<unknown>>;
     pathParameter?: Parameter;
 }
 

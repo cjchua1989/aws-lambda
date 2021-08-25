@@ -28,6 +28,11 @@ plugins:
 
 
 provider:
+  logs:
+    restApi: true
+  tracing:
+    apiGateway: true
+    lambda: true
   name: aws
   runtime: nodejs14.x
   versionFunctions: false

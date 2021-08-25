@@ -27,6 +27,8 @@ plugins:
 
 
 provider:
+  tracing:
+    lambda: true
   name: aws
   runtime: nodejs14.x
   versionFunctions: false

@@ -67,13 +67,6 @@ export class Path {
     private parameters: Parameters = {};
     private responses: Responses;
 
-    constructor(key: string, method: METHOD, tag: string, summary?: string) {
-        this.key = key;
-        this.method = method;
-        this.tag = tag;
-        this.summary = summary ?? '';
-    }
-
     addBody<A extends ExampleParameter<unknown>>(schema: string, examples?: A[]): Path {
         this.parameters.body = <BodyParameter<A>>{
             schema,

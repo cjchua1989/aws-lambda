@@ -1,3 +1,3 @@
-abstract class Request {
+import { Schema } from './Schema';
 
-}
+export class Request extends Schema {}

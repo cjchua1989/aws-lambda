@@ -29,7 +29,7 @@ export interface MultipartMapParts {
  *
  * @returns {Promise<AWS.S3|*>}
  */
-async function getService(
+export async function getService(
     accessKeyId: string | undefined = undefined,
     secretAccessKey: string | undefined = undefined,
 ): Promise<AWS.S3> {

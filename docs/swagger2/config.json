@@ -1,0 +1,21 @@
+{
+  "name": "<PROJECT_NAME>",
+  "description": "<PROJECT_DESCRIPTION>",
+  "version": "1.0.0",
+
+  "contact": {
+    "name": "John Dela Cruz",
+    "email": "support@example.com",
+    "url": "example.com"
+  },
+
+  "development": "<DEVELOPMENT_ENVIRONMENT_URL>",
+  "staging": "<STAGING_ENVIRONMENT_URL>",
+  "production": "<PRODUCTION_ENVIRONMENT_URL>",
+  "tags": [
+    {
+      "name": "PUBLIC",
+      "description": "Publicly accessible APIs"
+    }
+  ]
+}

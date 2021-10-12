@@ -14,20 +14,20 @@ export enum Types {
 }
 
 export enum HttpStatus {
-    R200 = 200,
-    R201 = 201,
-    R202 = 202,
-    R204 = 204,
-    R400 = 400,
-    R401 = 401,
-    R403 = 403,
-    R404 = 404,
-    R409 = 409,
-    R410 = 410,
-    R419 = 419,
-    R422 = 422,
-    R423 = 423,
-    R500 = 500,
+    SUCCESS = 200,
+    CREATED = 201,
+    UPDATED = 202,
+    DELETED = 204,
+    BAD_REQUEST = 400,
+    UNAUTHORIZED = 401,
+    ACCESS_DENIED = 403,
+    NOT_FOUND = 404,
+    DUPLICATE = 409,
+    OTP_EXPIRED = 410,
+    TOKEN_EXPIRED = 419,
+    PARAMETER_ERROR = 422,
+    MAX_TRIES = 423,
+    SERVER_ERROR = 500,
 }
 
 export enum StandardResponse {
@@ -193,11 +193,45 @@ export class Path {
 
     addResponse<T extends IHttpResponse>(
         code: HttpStatus,
-        schema: string | StandardResponse,
         description: string,
         examples: IExamples<T>,
+        schema?: string,
     ): void {
+        schema = schema ?? this.parseSchema(code);
         this.responses.push(new ResponseData(code, schema, description, examples));
+    }
+
+    parseSchema(code: HttpStatus): StandardResponse {
+        switch (code) {
+            case HttpStatus.SUCCESS:
+                return StandardResponse.SUCCESS;
+            case HttpStatus.CREATED:
+                return StandardResponse.CREATED;
+            case HttpStatus.UPDATED:
+                return StandardResponse.UPDATED;
+            case HttpStatus.DELETED:
+                return StandardResponse.DELETED;
+            case HttpStatus.BAD_REQUEST:
+                return StandardResponse.BAD_REQUEST;
+            case HttpStatus.UNAUTHORIZED:
+                return StandardResponse.UNAUTHORIZED;
+            case HttpStatus.ACCESS_DENIED:
+                return StandardResponse.ACCESS_DENIED;
+            case HttpStatus.NOT_FOUND:
+                return StandardResponse.NOT_FOUND;
+            case HttpStatus.DUPLICATE:
+                return StandardResponse.DUPLICATE;
+            case HttpStatus.OTP_EXPIRED:
+                return StandardResponse.OTP_EXPIRED;
+            case HttpStatus.TOKEN_EXPIRED:
+                return StandardResponse.TOKEN_EXPIRED;
+            case HttpStatus.PARAMETER_ERROR:
+                return StandardResponse.PARAMETER_ERROR;
+            case HttpStatus.MAX_TRIES:
+                return StandardResponse.MAX_TRIES;
+            case HttpStatus.SERVER_ERROR:
+                return StandardResponse.SERVER_ERROR;
+        }
     }
 
     get index(): string {

@@ -22,7 +22,7 @@ export class Auth extends Path {
             },
         });
 
-        this.addResponse(HttpStatus.R422, StandardResponse.PARAMETER_ERROR, 'Parameter Error', {
+        this.addResponse(HttpStatus.PARAMETER_ERROR, 'Parameter Error', {
             DEFAULT: {
                 code: 422,
                 message: 'Parameter Error',
@@ -33,21 +33,21 @@ export class Auth extends Path {
             },
         });
 
-        this.addResponse(HttpStatus.R401, StandardResponse.UNAUTHORIZED, 'Invalid username and password', {
+        this.addResponse(HttpStatus.UNAUTHORIZED, 'Invalid username and password', {
             DEFAULT: {
                 code: 401,
                 message: 'Invalid username and password',
             },
         });
 
-        this.addResponse(HttpStatus.R404, StandardResponse.NOT_FOUND, 'Username is not registered', {
+        this.addResponse(HttpStatus.NOT_FOUND, 'Username is not registered', {
             DEFAULT: {
                 code: 404,
                 message: 'Username is not registered',
             },
         });
 
-        this.addResponse(HttpStatus.R423, StandardResponse.MAX_TRIES, 'Max tries was reached', {
+        this.addResponse(HttpStatus.MAX_TRIES, 'Max tries was reached', {
             DEFAULT: {
                 code: 423,
                 message: 'Max attempt was reach please try again later',

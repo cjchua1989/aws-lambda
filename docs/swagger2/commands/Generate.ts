@@ -41,6 +41,7 @@ interface IConfig {
     contact?: IContact;
 
     tags: Tag[];
+    security_schemes: ISecuritySchemes;
 }
 
 interface IInfo {
@@ -57,6 +58,21 @@ interface IInformation {
     compile();
 }
 
+interface ICompileInformation {
+    openapi: string;
+    info: IInfo;
+    servers: IServer[];
+    tags: Tag[];
+}
+
+interface ISecuritySchemes {
+    [key: string]: {
+        type: 'http';
+        scheme: 'bearer';
+        bearerFormat: 'JWT';
+    };
+}
+
 class Information implements IInformation {
     private _description: string;
     private _openapi: string;
@@ -65,6 +81,7 @@ class Information implements IInformation {
     private _version: string;
     private _tags: Tag[];
     private _contact?: IContact;
+    private _security_schemes?: ISecuritySchemes;
 
     loadData(file): Information {
         const content = readFileSync(file);
@@ -76,6 +93,7 @@ class Information implements IInformation {
         this._description = data.description ?? '';
         this._tags = data.tags;
         this._contact = data.contact;
+        this._security_schemes = data.security_schemes;
 
         if (data.development) this.addServer(Environment.DEVELOPMENT, data.development);
         if (data.staging) this.addServer(Environment.STAGING, data.staging);
@@ -116,13 +134,17 @@ class Information implements IInformation {
         });
     }
 
-    compile(): any {
+    compile(): ICompileInformation {
         return {
             openapi: this.openapi,
             info: this.info,
             servers: this.servers,
             tags: this._tags,
         };
+    }
+
+    get security(): ISecuritySchemes | undefined {
+        return this._security_schemes;
     }
 }
 
@@ -131,7 +153,7 @@ export class Generate {
     private readonly paths: string;
     private readonly base_schemas: string;
     private readonly schemas: string;
-    private output: any = {};
+    private output: any;
 
     constructor(config: string, paths: string, base_schemas: string, schemas: string) {
         this.config = config;
@@ -142,7 +164,9 @@ export class Generate {
 
     async execute(): Promise<void> {
         try {
-            this.output = new Information().loadData(this.config).compile();
+            const information = new Information().loadData(this.config);
+            this.output = information.compile();
+
             const paths = await this.loadPaths(this.paths);
 
             if (paths.length > 0) {
@@ -159,6 +183,9 @@ export class Generate {
             }
 
             this.output.components = { schemas: {} };
+            if (information.security) {
+                this.output.components.securitySchemes = information.security;
+            }
             const base_schemas = await this.loadSchema(this.base_schemas);
             if (base_schemas.length > 0) {
                 for (const item of base_schemas) {

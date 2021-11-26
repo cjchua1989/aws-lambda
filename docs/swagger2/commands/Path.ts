@@ -1,3 +1,6 @@
+import { pascalCase } from 'case-anything';
+import * as faker from 'faker';
+
 export enum Method {
     GET = 'get',
     POST = 'post',
@@ -63,14 +66,22 @@ interface IResponse<T> {
     code: HttpStatus;
     description?: string;
     schema: string | StandardResponse;
-    examples: IExamples<T>;
+    examples: ICompileExamples<T>;
 }
 
-interface IHttpResponse {
-    code: number;
-    message: string;
-    errors?: {
-        [key: string]: string;
+interface IErrors {
+    [key: string]: string;
+}
+
+export interface IHttpResponse {
+    code?: number;
+    message?: string;
+    errors?: IErrors;
+}
+
+interface ICompileExamples<T> {
+    [key: string]: {
+        value: T;
     };
 }
 
@@ -87,8 +98,8 @@ class ResponseData<T extends IHttpResponse> implements IResponse<T> {
         this._examples = examples;
     }
 
-    get examples(): any {
-        const examples = {};
+    get examples(): ICompileExamples<T> {
+        const examples: ICompileExamples<T> = {};
         for (const index in this._examples) {
             examples[index] = {
                 value: this._examples[index],
@@ -115,7 +126,7 @@ class PathData implements IPathData {
 
 interface IBodyData<T> {
     schema: string;
-    examples: IExamples<T>;
+    examples: ICompileExamples<T>;
 }
 
 interface IQueryData<T> {
@@ -124,6 +135,7 @@ interface IQueryData<T> {
     description: string;
     required: boolean;
     example: T;
+    enumerate?: T[];
 }
 
 class BodyData<T> implements IBodyData<T> {
@@ -135,7 +147,7 @@ class BodyData<T> implements IBodyData<T> {
         this._examples = examples;
     }
 
-    get examples(): any {
+    get examples(): ICompileExamples<T> {
         const examples = {};
         for (const index in this._examples) {
             examples[index] = {
@@ -153,14 +165,66 @@ class QueryData<T> implements IQueryData<T> {
     key: string;
     required: boolean;
     type: Types;
+    enumerate?: T[];
 
-    constructor(key: string, type: Types, required = true, example: T, description = '') {
+    constructor(key: string, type: Types, required = true, example: T, description = '', enumerate?: T[]) {
         this.key = key;
         this.type = type;
         this.required = required;
         this.example = example;
         this.description = description;
+        this.enumerate = enumerate;
     }
+}
+
+interface IContent {
+    'application/json': {
+        schema: {
+            $ref: string;
+        };
+        examples: ICompileExamples<unknown>;
+    };
+}
+
+interface ISecurity {
+    [key: string]: string[];
+}
+
+interface ICompilePath {
+    tags: string[];
+    summary: string;
+    requestBody?: {
+        content: {
+            'application/json'?: {
+                schema: {
+                    $ref: string;
+                };
+                examples: ICompileExamples<unknown>;
+            };
+        };
+    };
+    parameters?: {
+        in: 'query' | 'header' | 'path';
+        required: boolean;
+        name: string;
+        description: string;
+        examples?: {
+            DEFAULT: {
+                value: unknown;
+            };
+        };
+        schema: {
+            type: Types;
+            enumerate?: unknown[];
+        };
+    }[];
+    responses?: {
+        [key: string]: {
+            content?: IContent;
+            description?: string;
+        };
+    };
+    security?: ISecurity[];
 }
 
 export class Path {
@@ -170,17 +234,21 @@ export class Path {
     private headers: IQueryData<unknown>[] = [];
     private paths: IQueryData<unknown>[] = [];
     private responses: IResponse<IHttpResponse>[] = [];
+    private secuity: string[];
 
     constructor(method: Method, path: string, tag: string, description = '') {
         this.core = new PathData(method, path, tag, description);
+        this.addStandardResponse(HttpStatus.SERVER_ERROR, 'Something went wrong, please try again');
     }
 
-    addBody<T>(schema: string, examples: IExamples<T>): void {
-        this.body = new BodyData(schema, examples);
+    addBody<T>(examples: T): void {
+        this.body = new BodyData(this.request, <IExamples<T>>{
+            DEFAULT: examples,
+        });
     }
 
-    addQuery<T>(key: string, type: Types, required: true, example: T, description = ''): void {
-        this.queries.push(new QueryData<T>(key, type, required, example, description));
+    addQuery<T>(key: string, type: Types, required = true, example: T, description = '', enumerate?: T[]): void {
+        this.queries.push(new QueryData<T>(key, type, required, example, description, enumerate));
     }
 
     addPath<T>(key: string, type: Types, example: T, description = ''): void {
@@ -193,12 +261,20 @@ export class Path {
 
     addResponse<T extends IHttpResponse>(
         code: HttpStatus,
-        description: string,
-        examples: IExamples<T>,
+        message: string,
+        examples: T,
+        index = 'DEFAULT',
         schema?: string,
     ): void {
-        schema = schema ?? this.parseSchema(code);
-        this.responses.push(new ResponseData(code, schema, description, examples));
+        this.responses.push(
+            new ResponseData(code, schema ?? this.response, message, <IExamples<T>>{
+                [index]: {
+                    code,
+                    message,
+                    ...examples,
+                },
+            }),
+        );
     }
 
     parseSchema(code: HttpStatus): StandardResponse {
@@ -235,15 +311,15 @@ export class Path {
     }
 
     get index(): string {
-        return '/' + this.core.key;
+        return '/v2/' + this.core.key;
     }
 
     get method(): string {
         return this.core.method;
     }
 
-    get compile(): any {
-        const data: any = {
+    get compile(): ICompilePath {
+        const data: ICompilePath = {
             tags: [this.core.tag],
             summary: this.core.description,
         };
@@ -264,15 +340,19 @@ export class Path {
         if (this.queries.length > 0 || this.headers.length > 0 || this.paths.length > 0) {
             data.parameters = [];
 
-            for (const query of this.queries) {
+            for (const path of this.paths) {
                 data.parameters.push({
-                    in: 'query',
-                    required: query.required,
-                    name: query.key,
-                    description: query.description,
-                    example: query.example,
+                    in: 'path',
+                    required: path.required,
+                    name: path.key,
+                    description: path.description,
+                    examples: {
+                        DEFAULT: {
+                            value: path.example,
+                        },
+                    },
                     schema: {
-                        type: query.type,
+                        type: path.type,
                     },
                 });
             }
@@ -283,23 +363,38 @@ export class Path {
                     required: header.required,
                     name: header.key,
                     description: header.description,
-                    example: header.example,
+                    examples: {
+                        DEFAULT: {
+                            value: header.example,
+                        },
+                    },
                     schema: {
                         type: header.type,
                     },
                 });
             }
 
-            for (const path of this.paths) {
+            for (const query of this.queries) {
+                const schema: {
+                    type: Types;
+                    enum?: unknown[];
+                } = {
+                    type: query.type,
+                };
+
+                if (query.enumerate) schema.enum = query.enumerate;
+
                 data.parameters.push({
-                    in: 'path',
-                    required: path.required,
-                    name: path.key,
-                    description: path.description,
-                    example: path.example,
-                    schema: {
-                        type: path.type,
+                    in: 'query',
+                    required: query.required,
+                    name: query.key,
+                    description: query.description,
+                    examples: {
+                        DEFAULT: {
+                            value: query.example,
+                        },
                     },
+                    schema,
                 });
             }
         }
@@ -307,6 +402,25 @@ export class Path {
         if (this.responses.length > 0) {
             data.responses = {};
             for (const response of this.responses) {
+                if (data.responses[response.code]) {
+                    const item = data.responses[response.code];
+                    if (item.content) {
+                        item['content']['application/json'].examples = {
+                            ...item.content['application/json'].examples,
+                            ...response.examples,
+                        };
+                        data.responses[response.code] = item;
+                        continue;
+                    }
+                }
+
+                if (response.code == HttpStatus.DELETED) {
+                    data.responses[response.code] = {
+                        description: response.description,
+                    };
+                    continue;
+                }
+
                 data.responses[response.code] = {
                     content: {
                         'application/json': {
@@ -321,6 +435,76 @@ export class Path {
             }
         }
 
+        if (this.secuity) {
+            data.security = [];
+            for (const index of this.secuity) {
+                data.security.push({
+                    [index]: [],
+                });
+            }
+        }
+
         return data;
+    }
+
+    get response(): string {
+        return pascalCase(this.constructor.name + 'Response');
+    }
+
+    get request(): string {
+        return pascalCase(this.constructor.name + 'Request');
+    }
+
+    addParameterError(errors: IErrors): void {
+        this.addResponse(
+            HttpStatus.PARAMETER_ERROR,
+            'Parameter Error',
+            {
+                code: HttpStatus.PARAMETER_ERROR,
+                message: 'Parameter Error',
+                errors,
+            },
+            'DEFAULT',
+            this.parseSchema(HttpStatus.PARAMETER_ERROR),
+        );
+    }
+
+    addStandardResponse(code: HttpStatus, message: string, custom_code?: number, index = 'DEFAULT'): void {
+        this.addResponse(
+            code,
+            message,
+            {
+                code: custom_code ?? code,
+                message,
+            },
+            index,
+            this.parseSchema(code),
+        );
+    }
+
+    addAuthorizedResponse(roles: string[]): void {
+        this.roles = roles;
+        this.addHeader<string>(
+            'Authorization',
+            Types.STRING,
+            true,
+            'Bearer ' + faker.random.alphaNumeric(100),
+            'JWT Token provide after login',
+        );
+        this.addStandardResponse(HttpStatus.UNAUTHORIZED, 'Missing authorization header');
+        this.addStandardResponse(HttpStatus.ACCESS_DENIED, 'Invalid authorization header');
+    }
+
+    set roles(roles: string[]) {
+        this.secuity = roles;
+    }
+
+    addPagination(): void {
+        this.addQuery<number>('limit', Types.NUMBER, false, 50, 'Limit the number of result per page, max 50');
+        this.addQuery<number>('page', Types.NUMBER, false, 1, 'Page to be accessed, default set to 1');
+    }
+
+    addSearch(): void {
+        this.addQuery<string>('search', Types.STRING, false, 'Sample', 'Term to search');
     }
 }

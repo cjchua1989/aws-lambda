@@ -1,20 +1,29 @@
 {
-  "name": "<PROJECT_NAME>",
-  "description": "<PROJECT_DESCRIPTION>",
-  "version": "1.0.0",
+  "name": "<NAME>",
+  "description": "<DESCRIPTION>",
+  "version": "<VERSION>",
 
   "contact": {
-    "name": "John Dela Cruz",
-    "email": "support@example.com"
+    "name": "<DEVELOPER>",
+    "email": "<EMAIL>"
   },
 
-  "development": "<DEVELOPMENT_ENVIRONMENT_URL>",
-  "staging": "<STAGING_ENVIRONMENT_URL>",
-  "production": "<PRODUCTION_ENVIRONMENT_URL>",
+  "development": "<DEVELOP ENVIRONMENT BASE URL>",
   "tags": [
     {
       "name": "PUBLIC",
       "description": "Publicly accessible APIs"
+    },
+    {
+      "name": "AUTHENTICATED",
+      "description": "Only authenticated user can access"
     }
-  ]
+  ],
+  "security_schemes": {
+    "authenticated": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  }
 }

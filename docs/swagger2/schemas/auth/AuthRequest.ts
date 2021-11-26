@@ -4,8 +4,7 @@ import { Types } from '../../commands/Types';
 export class AuthRequest extends Schema {
     constructor() {
         super();
-        this.name = 'auth_request';
-        this.addAttribute('username', Types.STRING('Account email address or mobile number'));
-        this.addAttribute('password', Types.STRING('Account password'));
+        this.addAttribute('key', Types.STRING('Account key provided'));
+        this.addAttribute('secret', Types.STRING('Account secret provided'));
     }
 }

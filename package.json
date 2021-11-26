@@ -24,6 +24,7 @@
     "@types/yargs": "^15.0.12",
     "aws-sdk": "^2.919.0",
     "case-anything": "^1.1.2",
+    "json-schema": ">=0.4.0",
     "chai-json-schema": "^1.5.1",
     "eslint": "^7.17.0",
     "eslint-config-prettier": "^7.1.0",
@@ -40,6 +41,10 @@
     "yargs": "^16.2.0"
   },
   "dependencies": {
+    "jsonpointer": ">=5.0.0",
+    "validator": ">=13.7.0",
+    "immer": ">=9.0.6",
+    "pac-resolver": ">=5.0.0",
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
     "@types/axios": "^0.14.0",

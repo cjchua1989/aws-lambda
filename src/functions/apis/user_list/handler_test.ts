@@ -6,7 +6,7 @@ test('200: SUCCESS', async () => {
         body: JSON.stringify({}),
         queryStringParameters: {
             page: '1',
-            limit: '2'
+            limit: '2',
         },
     };
 

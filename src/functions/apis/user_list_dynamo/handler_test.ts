@@ -8,7 +8,7 @@ test('200: SUCCESS', async () => {
             page: 'NEXT',
             limit: '2',
             key: '',
-            forward: 'true'
+            forward: 'true',
         },
     };
 

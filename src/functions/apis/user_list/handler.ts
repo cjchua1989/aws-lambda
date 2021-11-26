@@ -5,6 +5,7 @@ import { ApiGatewayEvent } from '../../../libs/Contracts/ApiGatewayEvent';
 import { Responses } from './responses';
 import { UserListAction } from './action';
 import { HttpRequestHelper, PaginationQuery } from '../../../helper/HttpHelper';
+import { WarmerService } from '../../../services/WarmerService';
 
 interface QueryStringParameters extends PaginationQuery {
     sort_value: string;
@@ -12,6 +13,7 @@ interface QueryStringParameters extends PaginationQuery {
 
 export async function execute(event: ApiGatewayEvent): Promise<APIHttpResponse> {
     try {
+        WarmerService.execute(event);
         const connection = await Databases.getConnection();
         const action = new UserListAction(connection);
         const data = await action.execute(

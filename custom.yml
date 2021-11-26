@@ -45,6 +45,10 @@ REFRESH_TOKEN_AUTHORIZE:
   identitySource: method.request.header.Authorization
   identityValidationExpression: Bearer (.*)
 
+warmer_schedule:
+  default: cron(0/5 0-8 ? * MON-FRI *)
+  prod: cron(0/5 0-23 * * ? *)
+
 warmup:
   default:
     folderName: '.warmup'
@@ -52,6 +56,8 @@ warmup:
     memorySize: 256
     name: ${env:SERVICE_NAME}-${env:STAGE}-warmer
     enabled: true
-    concurrency: 10
+    events:
+      - schedule: ${self:custom.warmer_schedule.${opt:stage}, self:custom.warmer_schedule.default}
+    concurrency: 5
     package:
       individually: false

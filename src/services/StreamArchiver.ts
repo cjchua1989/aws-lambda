@@ -1,6 +1,6 @@
 import { Readable, Stream } from 'stream';
 import { getService } from '../libs/S3';
-const archiver = require('archiver');
+import * as archiver from 'archiver';
 const S3_BUCKET = process.env.S3_BUCKET ?? '';
 
 export type S3DownloadStreamDetails = { stream: Readable; filename: string };

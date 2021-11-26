@@ -13,3 +13,8 @@ get_profile:
     MYSQLDB_USERNAME: ${self:custom.MYSQLDB_USERNAME}
     MYSQLDB_PASSWORD: ${self:custom.MYSQLDB_PASSWORD}
     MYSQLDB_PORT: ${self:custom.MYSQLDB_PORT}
+
+  #warmup enabled
+  warmup:
+    default:
+      enabled: true

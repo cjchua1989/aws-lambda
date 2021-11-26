@@ -5,9 +5,11 @@ import { ApiGatewayEvent } from '../../../libs/Contracts/ApiGatewayEvent';
 import { Responses } from './responses';
 import { GetProfileAction } from './action';
 import { TokenService } from '../../../services/TokenService';
+import { WarmerService } from '../../../services/WarmerService';
 
 export async function execute(event: ApiGatewayEvent): Promise<APIHttpResponse> {
     try {
+        WarmerService.execute(event);
         const user_id = new TokenService(event).user_id;
         const connection = await Databases.getConnection();
         const action = new GetProfileAction(connection);

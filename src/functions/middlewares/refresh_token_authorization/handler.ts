@@ -11,12 +11,15 @@ import { Logger } from '../../../libs/Logger';
 import { JWT } from '../../../libs/JWT';
 import { TokenType } from '../../../helper/Enums';
 import { Databases } from '../../../libs/Mysql';
+import { WarmerService } from '../../../services/WarmerService';
 
 export async function execute(event: Event, context?: Context): Promise<string | Policy> {
     const request_id = context !== undefined && context.awsRequestId ? context.awsRequestId : '';
     const resource = event.methodArn;
 
     try {
+        WarmerService.execute(event);
+
         if (typeof event.authorizationToken === 'undefined' || event.authorizationToken === '') {
             Logger.error('Authorization:403', { event, context });
             return generatePolicy(request_id, Effect.DENY, resource);

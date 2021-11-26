@@ -4,6 +4,7 @@ import { ApiGatewayEvent } from '../../../libs/Contracts/ApiGatewayEvent';
 import { Responses } from './responses';
 import { UserListDynamoAction } from './action';
 import { HttpRequestHelper, PaginationQuery } from '../../../helper/HttpHelper';
+import { WarmerService } from '../../../services/WarmerService';
 
 interface QueryStringParameters extends PaginationQuery {
     sort_value: string;
@@ -11,6 +12,7 @@ interface QueryStringParameters extends PaginationQuery {
 
 export async function execute(event: ApiGatewayEvent): Promise<APIHttpResponse> {
     try {
+        WarmerService.execute(event);
         const action = new UserListDynamoAction();
         const data = await action.execute(
             HttpRequestHelper.extractDynamoPagination<QueryStringParameters>(

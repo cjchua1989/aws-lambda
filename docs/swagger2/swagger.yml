@@ -3,6 +3,10 @@ info:
   title: <PROJECT_NAME>
   version: 1.0.0
   description: <PROJECT_DESCRIPTION>
+  contact:
+    name: John Dela Cruz
+    email: support@example.com
+    url: example.com
 servers:
   - url: <DEVELOPMENT_ENVIRONMENT_URL>
     description: Development Server
@@ -42,8 +46,8 @@ paths:
             examples:
               DEFAULT:
                 value:
-                  username: Cruz_OConner@yahoo.com
-                  password: p0ne1u4xqj
+                  username: Pierre15@hotmail.com
+                  password: 3678ghrma5
       responses:
         "401":
           content:

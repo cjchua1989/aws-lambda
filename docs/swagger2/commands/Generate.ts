@@ -24,6 +24,11 @@ interface Tag {
     description: string;
 }
 
+interface IContact {
+    name: string;
+    email: string;
+}
+
 interface IConfig {
     name: string;
     description?: string;
@@ -33,11 +38,7 @@ interface IConfig {
     development: string;
     production: string;
 
-    contact?: {
-        name: string;
-        url?: string;
-        email: string;
-    };
+    contact?: IContact;
 
     tags: Tag[];
 }
@@ -46,6 +47,7 @@ interface IInfo {
     title: string;
     description: string;
     version: string;
+    contact?: IContact;
 }
 
 interface IInformation {
@@ -62,6 +64,7 @@ class Information implements IInformation {
     private _title: string;
     private _version: string;
     private _tags: Tag[];
+    private _contact?: IContact;
 
     loadData(file): Information {
         const content = readFileSync(file);
@@ -72,6 +75,7 @@ class Information implements IInformation {
         this._version = data.version;
         this._description = data.description ?? '';
         this._tags = data.tags;
+        this._contact = data.contact;
 
         if (data.development) this.addServer(Environment.DEVELOPMENT, data.development);
         if (data.staging) this.addServer(Environment.STAGING, data.staging);
@@ -89,6 +93,7 @@ class Information implements IInformation {
             title: this._title,
             version: this._version,
             description: this._description,
+            contact: this._contact,
         };
     }
 

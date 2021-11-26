@@ -5,8 +5,7 @@
 
   "contact": {
     "name": "John Dela Cruz",
-    "email": "support@example.com",
-    "url": "example.com"
+    "email": "support@example.com"
   },
 
   "development": "<DEVELOPMENT_ENVIRONMENT_URL>",

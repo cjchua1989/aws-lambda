@@ -63,7 +63,7 @@
     "dot-object": "^2.1.4",
     "dotenv": "^8.2.0",
     "joi": "^17.3.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "moment-timezone": "^0.5.32",
     "mysql": "^2.18.1",
     "mysql-migrations": "^1.0.7",
